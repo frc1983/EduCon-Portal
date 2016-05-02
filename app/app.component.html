@@ -1,0 +1,22 @@
+<div id="wrapper">
+	<div id="sidebar-wrapper">
+		<ul class="sidebar-nav">
+			<li class="sidebar-brand">
+				<a href="#">
+					Educação Conectada
+				</a>
+			</li>
+			<li>
+			  <ul>
+				  <li class="active"><a [routerLink]="['Home']">Home</a></li>
+				  <li><a [routerLink]="['Busca']">Busca</a></li>
+				  <li><a [routerLink]="['Municipio']">Municipio</a></li>
+			  </ul>
+			</li>
+			<li>
+				<a href="layouts.html"><i class="fa fa-diamond"></i> <span class="nav-label">Layouts</span></a>
+			</li>                    
+		</ul>
+	</div>
+	<router-outlet></router-outlet>
+</div>

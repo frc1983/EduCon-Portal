@@ -1,0 +1,21 @@
+<div id="page-content-wrapper">
+<h3>Municipio</h3>
+<div class="error" *ngIf="errorMessage">{{errorMessage}}</div>
+
+<input #buscaMunicipio />
+<button (click)="getMunicipio(buscaMunicipio.value); buscaMunicipio.value=''">
+  Buscar Município
+</button>
+
+<ul>
+    <li *ngFor="let municipio of municipios">
+        {{municipio.id}}
+        {{municipio.nome}}
+        {{municipio.latitude}}
+        {{municipio.longitude}}
+    </li>
+</ul>
+</div>
+<div id="loader" *ngIf="isLoading">
+    <img src="app/images/loading.gif" class="ajax-loader"/>
+</div>
