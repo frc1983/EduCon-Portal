@@ -4,6 +4,8 @@ import { Router } from 'angular2/router';
 import { Municipio } from '../../models/municipio';
 import { MunicipioService } from '../../services/municipio.service';
 
+import { MDL } from '../../MaterialDesignLiteUpgradeElement';
+
 import 'rxjs/Rx';
 import {Observable} from 'rxjs/Observable';
 
@@ -11,7 +13,8 @@ import {Observable} from 'rxjs/Observable';
   selector: 'municipio',
   templateUrl: 'app/pages/municipio/municipio.component.html',
   styleUrls: ['app/pages/municipio/municipio.component.css'],
-  providers: [MunicipioService]
+  providers: [MunicipioService],
+  directives: [ MDL ]
 })
 
 export class MunicipioComponent implements OnInit {
@@ -20,7 +23,7 @@ export class MunicipioComponent implements OnInit {
     isLoading: boolean = false;
     
     constructor(private _municipioService: MunicipioService) { }
-      
+	
       ngOnInit() {
         this.getMunicipios();
       }

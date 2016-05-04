@@ -1,18 +1,25 @@
-<div id="page-content-wrapper">
+<div mdl id="page-content-wrapper">
 <h3>Municipio</h3>
 <div class="error" *ngIf="errorMessage">{{errorMessage}}</div>
 
-<input #buscaMunicipio />
-<button (click)="getMunicipio(buscaMunicipio.value); buscaMunicipio.value=''">
+<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <input #buscaMunicipio class="mdl-textfield__input" type="text" id="sample3">
+    <label class="mdl-textfield__label" for="sample3">Buscar município</label>
+</div>
+<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="getMunicipio(buscaMunicipio.value); buscaMunicipio.value=''">
   Buscar Município
 </button>
 
-<ul>
-    <li *ngFor="let municipio of municipios">
-        {{municipio.id}}
-        {{municipio.nome}}
-        {{municipio.latitude}}
-        {{municipio.longitude}}
+<ul class="demo-list-three mdl-list">
+    <li *ngFor="let municipio of municipios" class="mdl-list__item mdl-list__item--three-line">
+		<span class="mdl-list__item-primary-content">
+			{{municipio.id}}
+			{{municipio.nome}}
+			<span class="mdl-list__item-text-body">
+				{{municipio.latitude}}
+				{{municipio.longitude}}
+			</span>
+		</span>		
     </li>
 </ul>
 </div>

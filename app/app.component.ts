@@ -5,11 +5,12 @@ import {bootstrap} from 'angular2/platform/browser';
 import { HomeComponent } from './pages/home/home.component';
 import { BuscaComponent } from './pages/busca/busca.component';
 import { MunicipioComponent } from './pages/municipio/municipio.component';
+import { MDL } from './MaterialDesignLiteUpgradeElement';
 
 @Component({
   selector: 'edu-con',
   templateUrl: 'app/app.component.html',
-    directives: [ROUTER_DIRECTIVES],
+    directives: [ROUTER_DIRECTIVES, MDL],
     providers: [ROUTER_PROVIDERS]
 })
 @RouteConfig([
@@ -29,6 +30,6 @@ import { MunicipioComponent } from './pages/municipio/municipio.component';
     component: MunicipioComponent
   }
 ])
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   title = 'EduCon - Educação Conectada';
 }
