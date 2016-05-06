@@ -6,20 +6,19 @@ import { BaseService } from './base.service';
 
 @Injectable()
 export class MunicipioService {
-    
     constructor (private http: Http, private _baseService: BaseService) { }
     
     //private _municipiosUrl = 'http://private-bd331-educon.apiary-mock.com/municipios';  // URL to web api
     private _municipiosUrl = "http://educon.apphb.com/api/municipio";
     
     getMunicipios() {
-            return this.http.get(this._municipiosUrl + "/Lista")
+            return this.http.get(this._municipiosUrl + "/Lista", this._baseService.getHeaders())
                 .map(obj => Municipio.fromJSONArray(this._baseService.extractData(obj)))
                 .catch(this._baseService.handleError);
     }
     
     getMunicipioPorNome(nome: string) {
-        return this.http.get(this._municipiosUrl + "/ListaPorNome?nome=" + nome)
+        return this.http.get(this._municipiosUrl + "/ListaPorNome?nome=" + nome, this._baseService.getHeaders())
             .map(obj => Municipio.fromJSONArray(this._baseService.extractData(obj)))
             .catch(this._baseService.handleError);
 

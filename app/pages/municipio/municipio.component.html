@@ -10,6 +10,23 @@
   Buscar Município
 </button>
 
+<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+  <thead>
+    <tr>
+      <th class="mdl-data-table__cell--non-numeric mdl-data-table__header--sorted-ascending">Município</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let municipio of municipios">
+      <td class="mdl-data-table__cell--non-numeric">{{municipio.nome}}</td>
+      <td>{{municipio.latitude}}</td>
+      <td>{{municipio.longitude}}</td>
+    </tr>
+  </tbody>
+</table>
+
 <ul class="demo-list-three mdl-list">
     <li *ngFor="let municipio of municipios" class="mdl-list__item mdl-list__item--three-line">
 		<span class="mdl-list__item-primary-content">

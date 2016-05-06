@@ -9,7 +9,7 @@ export class BaseService {
         if (res.status < 200 || res.status >= 300)
             throw new Error('Bad response status: ' + res.status);
             
-        let body = res.json();
+        let body = res.json(); 
         return body || [];
     }
     
@@ -23,6 +23,7 @@ export class BaseService {
     public getHeaders(){
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
+		headers.append('Accept', 'application/json');
         headers.append('Access-Control-Allow-Origin', '*');
         let options = new RequestOptions({ headers: headers });
         
