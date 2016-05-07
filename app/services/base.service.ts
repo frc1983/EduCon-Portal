@@ -19,14 +19,4 @@ export class BaseService {
         console.error(errMsg); // log to console instead
         return Observable.throw(errMsg);
     }
-    
-    public getHeaders(){
-        let headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-		headers.append('Accept', 'application/json');
-        headers.append('Access-Control-Allow-Origin', '*');
-        let options = new RequestOptions({ headers: headers });
-        
-        return options;
-    }
 }
