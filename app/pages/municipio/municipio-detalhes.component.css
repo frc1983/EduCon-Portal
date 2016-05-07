@@ -1,0 +1,12 @@
+.map-card-wide.mdl-card {
+    width: 512px;
+}
+
+.sebm-google-map-container {
+    height: 300px;
+}
+
+.card-left {
+    margin: 20px;
+    float: left;
+}

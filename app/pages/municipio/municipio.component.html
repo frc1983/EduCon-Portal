@@ -1,45 +1,47 @@
 <div mdl id="page-content-wrapper">
-<h3>Municipio</h3>
-<div class="error" *ngIf="errorMessage">{{errorMessage}}</div>
+    <h3>Municipio</h3>
+    <div class="error" *ngIf="errorMessage">{{errorMessage}}</div>
 
-<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input #buscaMunicipio class="mdl-textfield__input" type="text" id="sample3">
-    <label class="mdl-textfield__label" for="sample3">Buscar município</label>
-</div>
-<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="getMunicipio(buscaMunicipio.value); buscaMunicipio.value=''">
-  Buscar Município
-</button>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input #buscaMunicipio class="mdl-textfield__input" type="text" id="sample3">
+        <label class="mdl-textfield__label" for="sample3">Buscar município</label>
+    </div>
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="getMunicipio(buscaMunicipio.value); buscaMunicipio.value=''">
+        Buscar Município
+    </button>
 
-<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-  <thead>
-    <tr>
-      <th class="mdl-data-table__cell--non-numeric mdl-data-table__header--sorted-ascending">Município</th>
-      <th>Latitude</th>
-      <th>Longitude</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let municipio of municipios">
-      <td class="mdl-data-table__cell--non-numeric">{{municipio.nome}}</td>
-      <td>{{municipio.latitude}}</td>
-      <td>{{municipio.longitude}}</td>
-    </tr>
-  </tbody>
-</table>
+    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+        <thead>
+            <tr>
+                <th class="mdl-data-table__cell--non-numeric mdl-data-table__header--sorted-ascending">Município</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Detalhes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let municipio of municipios">
+                <td class="mdl-data-table__cell--non-numeric">{{municipio.nome}}</td>
+                <td>{{municipio.latitude}}</td>
+                <td>{{municipio.longitude}}</td>
+                <td><a class="mdl-navigation__link" [routerLink]="['Municipio-Detalhes', { id: municipio.id }]">Municipio</a></td>
+            </tr>
+        </tbody>
+    </table>
 
-<ul class="demo-list-three mdl-list">
-    <li *ngFor="let municipio of municipios" class="mdl-list__item mdl-list__item--three-line">
-		<span class="mdl-list__item-primary-content">
-			{{municipio.id}}
-			{{municipio.nome}}
-			<span class="mdl-list__item-text-body">
-				{{municipio.latitude}}
-				{{municipio.longitude}}
-			</span>
-		</span>		
-    </li>
-</ul>
+    <ul class="demo-list-three mdl-list">
+        <li *ngFor="let municipio of municipios" class="mdl-list__item mdl-list__item--three-line">
+            <span class="mdl-list__item-primary-content">
+                {{municipio.id}}
+                {{municipio.nome}}
+                <span class="mdl-list__item-text-body">
+                    {{municipio.latitude}}
+                    {{municipio.longitude}}
+                </span>
+            </span>
+        </li>
+    </ul>
 </div>
 <div id="loader" *ngIf="isLoading">
-    <img src="app/images/loading.gif" class="ajax-loader"/>
+    <img src="app/images/loading.gif" class="ajax-loader" />
 </div>

@@ -5,6 +5,7 @@ import {bootstrap} from 'angular2/platform/browser';
 import { HomeComponent } from './pages/home/home.component';
 import { BuscaComponent } from './pages/busca/busca.component';
 import { MunicipioComponent } from './pages/municipio/municipio.component';
+import { MunicipioDetalhesComponent } from './pages/municipio/municipio-detalhes.component';
 import { MDL } from './MaterialDesignLiteUpgradeElement';
 
 @Component({
@@ -28,8 +29,13 @@ import { MDL } from './MaterialDesignLiteUpgradeElement';
     path: '/municipio',
     name: 'Municipio',
     component: MunicipioComponent
+  },
+  {
+      path: '/municipio-detalhes/:id',
+      name: 'Municipio-Detalhes',
+      component: MunicipioDetalhesComponent
   }
 ])
-export class AppComponent implements AfterViewInit {
+export class AppComponent {
   title = 'EduCon - Educação Conectada';
 }
