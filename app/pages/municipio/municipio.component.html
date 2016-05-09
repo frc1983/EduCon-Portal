@@ -10,37 +10,18 @@
         Buscar Município
     </button>
 
-    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-        <thead>
-            <tr>
-                <th class="mdl-data-table__cell--non-numeric mdl-data-table__header--sorted-ascending">Município</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
-                <th>Detalhes</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let municipio of municipios">
-                <td class="mdl-data-table__cell--non-numeric">{{municipio.nome}}</td>
-                <td>{{municipio.latitude}}</td>
-                <td>{{municipio.longitude}}</td>
-                <td><a class="link-sublinhado mdl-navigation__link" [routerLink]="['Municipio-Detalhes', { id: municipio.id }]">Detalhes</a></td>
-            </tr>
-        </tbody>
-    </table>
+	<p-dataTable [value]="municipios" [rows]="10" [paginator]="true" [responsive]="true" [totalRecords]="totalRecords" sortMode="multiple">
+		<p-column field="nome" header="Município" [sortable]="true"></p-column>
+		<p-column field="latitude" header="Latitude" [sortable]="true"></p-column>
+		<p-column field="longitude" header="Longitude" [sortable]="true"></p-column>
+		<p-column header="Detalhes">
+			<template let-municipio="rowData">
+				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" 
+					(click)="onNavigate(municipio.id)" ><i class="fa fa-search" aria-hidden="true"></i></button>
+			</template>
+		</p-column>
+	</p-dataTable>
 
-    <ul class="demo-list-three mdl-list">
-        <li *ngFor="let municipio of municipios" class="mdl-list__item mdl-list__item--three-line">
-            <span class="mdl-list__item-primary-content">
-                {{municipio.id}}
-                {{municipio.nome}}
-                <span class="mdl-list__item-text-body">
-                    {{municipio.latitude}}
-                    {{municipio.longitude}}
-                </span>
-            </span>
-        </li>
-    </ul>
 </div>
 <div id="loader" *ngIf="isLoading">
     <img src="app/images/loading.gif" class="ajax-loader" />

@@ -9,12 +9,15 @@ import { MDL } from '../../MaterialDesignLiteUpgradeElement';
 import 'rxjs/Rx';
 import {Observable} from 'rxjs/Observable';
 
+import {DataTable} from 'primeng/primeng';
+import {Column} from 'primeng/primeng';
+
 @Component({
   selector: 'municipio',
   templateUrl: 'app/pages/municipio/municipio.component.html',
   styleUrls: ['app/pages/municipio/municipio.component.css'],
   providers: [MunicipioService],
-  directives: [ ROUTER_DIRECTIVES, MDL ]
+  directives: [ ROUTER_DIRECTIVES, MDL, DataTable, Column ]
 })
 
 export class MunicipioComponent implements OnInit {
@@ -59,4 +62,9 @@ export class MunicipioComponent implements OnInit {
             this.isLoading = false;
           });  
       }
+	  
+	  onNavigate(id){
+		  console.log(id)
+		this.router.navigate(['/Municipio-Detalhes', { id: id }])
+	  }
 }
