@@ -1,0 +1,11 @@
+<div mdl id="page-content-wrapper">
+    <h3>Modelo OLAP dos dados</h3>
+    <div class="error" *ngIf="errorMessage">{{errorMessage}}</div>
+
+	<ig-pivot-data-selector [widgetId]="selectorId" [options]="optsSelector" style="float: left;"></ig-pivot-data-selector>
+	<ig-pivot-grid [widgetId]="gridId" [options]="optsGrid" style="float: left; margin-left: 20px; width: 79%;"></ig-pivot-grid>
+
+</div>
+<div id="loader" *ngIf="isLoading">
+    <img src="app/images/loading.gif" class="ajax-loader" />
+</div>

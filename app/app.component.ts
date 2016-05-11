@@ -5,6 +5,7 @@ import {bootstrap} from 'angular2/platform/browser';
 import { HomeComponent } from './pages/home/home.component';
 import { BuscaComponent } from './pages/busca/busca.component';
 import { MunicipioComponent } from './pages/municipio/municipio.component';
+import { OLAPComponent } from './pages/olap/olap.component';
 import { MunicipioDetalhesComponent } from './pages/municipio/municipio-detalhes.component';
 import { MDL } from './MaterialDesignLiteUpgradeElement';
 
@@ -34,6 +35,11 @@ import { MDL } from './MaterialDesignLiteUpgradeElement';
       path: '/municipio-detalhes/:id',
       name: 'Municipio-Detalhes',
       component: MunicipioDetalhesComponent
+  },
+  {
+      path: '/olap',
+      name: 'Olap',
+      component: OLAPComponent
   }
 ])
 export class AppComponent {
