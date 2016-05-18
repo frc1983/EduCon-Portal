@@ -11,12 +11,14 @@ import {Observable} from 'rxjs/Observable';
 
 import {ANGULAR2_GOOGLE_MAPS_DIRECTIVES} from 'angular2-google-maps/core';
 
+import {LineChart, Checkbox} from 'primeng/primeng';
+
 @Component({
     selector: 'municipio',
     templateUrl: 'app/pages/municipio/municipio-detalhes.component.html',
     styleUrls: ['app/pages/municipio/municipio-detalhes.component.css'],
     providers: [MunicipioService],
-    directives: [ROUTER_DIRECTIVES, MDL, ANGULAR2_GOOGLE_MAPS_DIRECTIVES]
+    directives: [ROUTER_DIRECTIVES, MDL, ANGULAR2_GOOGLE_MAPS_DIRECTIVES, LineChart, Checkbox]
 })
 
 export class MunicipioDetalhesComponent implements OnInit {
@@ -26,6 +28,9 @@ export class MunicipioDetalhesComponent implements OnInit {
     errorMessage: string;
     isLoading: boolean = false;
     zoom: number = 14;
+	data: any;
+    selectedGraphs: string[];
+    selectedCategories: string[];
 
     markers: {
         lat: number;
@@ -37,6 +42,34 @@ export class MunicipioDetalhesComponent implements OnInit {
         this.params = params;
         this.id = this.params.get('id');
         this.markers = new Array();
+        this.selectedGraphs = new Array();
+        this.selectedCategories = new Array();
+		
+		this.data = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            datasets: [
+                {
+                    label: 'My First dataset',
+                    fillColor: 'rgba(220,220,220,0.2)',
+                    strokeColor: 'rgba(220,220,220,1)',
+                    pointColor: 'rgba(220,220,220,1)',
+                    pointStrokeColor: '#fff',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(220,220,220,1)',
+                    data: [65, 59, 80, 81, 56, 55, 40]
+                },
+                {
+                    label: 'My Second dataset',
+                    fillColor: 'rgba(151,187,205,0.2)',
+                    strokeColor: 'rgba(151,187,205,1)',
+                    pointColor: 'rgba(151,187,205,1)',
+                    pointStrokeColor: '#fff',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(151,187,205,1)',
+                    data: [28, 48, 40, 19, 86, 27, 90]
+                }
+            ]
+        }
     }
 
     ngOnInit() {

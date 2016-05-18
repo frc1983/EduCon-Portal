@@ -17,7 +17,7 @@ import { MDL } from './MaterialDesignLiteUpgradeElement';
 })
 @RouteConfig([
   {
-    path: '/',
+    path: '/home',
     name: 'Home',
     component: HomeComponent,
     useAsDefault: true

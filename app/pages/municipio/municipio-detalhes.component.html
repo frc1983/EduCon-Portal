@@ -1,9 +1,9 @@
-<div mdl id="page-content-wrapper">
-    <h3 [innerHTML]="municipio ? 'Municipio de ' + municipio.nome : 'Municipio'"></h3>
-    <div class="error" *ngIf="errorMessage">{{errorMessage}}</div>
+<div mdl id="page-content-wrapper" class="mdl-grid ui-widget">
+    <h3 class="mdl-cell mdl-cell--12-col" [innerHTML]="municipio ? 'Municipio de ' + municipio.nome : 'Municipio'"></h3>
+    <div class="error mdl-cell mdl-cell--12-col" *ngIf="errorMessage">{{errorMessage}}</div>
 
-    <div id="detalhes-municipio" *ngIf="municipio">
-        <div class="mdl-card card-left mdl-shadow--2dp">
+    <div id="detalhes-municipio" *ngIf="municipio" class="mdl-cell mdl-cell--12-col" >
+        <div class="mdl-card card-left mdl-shadow--2dp mdl-cell mdl-cell--4-col">
             <div class="mdl-card__title mdl-card--border">
                 <h2 class="mdl-card__title-text">{{municipio.nome}}</h2>
             </div>
@@ -14,7 +14,7 @@
             </div>
         </div>
 
-        <div class="map-card-wide mdl-card card-left mdl-shadow--2dp">
+        <div class="mdl-card card-left mdl-shadow--2dp mdl-cell mdl-cell--8-col">
             <div class="mdl-card__title mdl-card--border">
                 <h2 class="mdl-card__title-text">Mapa da Região</h2>
             </div>
@@ -29,11 +29,81 @@
                 </sebm-google-map>
             </div>
         </div>
+        
+        
+        <h2 class="clear">Nome do Tipo de ensino</h2>
+        <h6>Um gráfico para cada tipo de ensino??</h6>
+        <br />
+        <br />
+        <div class="mdl-cell mdl-cell--12-col mdl-card card-left mdl-shadow--2dp width-to-max">
+			<div class="mdl-card__title mdl-card--border">
+                <h2 class="mdl-card__title-text">Opções de gráficos</h2>
+            </div>
+			<div class="mdl-card__supporting-text">                
+                <h6>Selecione os gráficos que deseja visualizar:</h6>
+                <h6>Um radio para cada categoria (Funções Docentes, Matrícula Inicial, etc.)</h6>
+                <div class="ui-grid ui-grid-responsive" style="width:250px;margin-bottom:10px">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-1"><p-checkbox name="grpGraphs" value="1" [(ngModel)]="selectedGraphs"></p-checkbox></div>
+                        <div class="ui-grid-col-11"><label class="ui-widget">Funções Docentes</label></div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-1"><p-checkbox name="grpGraphs" value="2" [(ngModel)]="selectedGraphs"></p-checkbox></div>
+                        <div class="ui-grid-col-11"><label class="ui-widget">Matrícula Inicial</label></div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-1"><p-checkbox name="grpGraphs" value="3" [(ngModel)]="selectedGraphs"></p-checkbox></div>
+                        <div class="ui-grid-col-11"><label class="ui-widget">Número de Concluintes</label></div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-1"><p-checkbox name="grpGraphs" value="4" [(ngModel)]="selectedGraphs"></p-checkbox></div>
+                        <div class="ui-grid-col-11"><label class="ui-widget">Número de Estabelecimentos</label></div>
+                    </div>
+                </div>
+			</div>
+		</div>		
+        
+        <h3>Gráficos</h3>
+		<div class="mdl-cell mdl-cell--12-col mdl-card card-left mdl-shadow--2dp">
+			<div class="mdl-card__title mdl-card--border">
+                <h2 class="mdl-card__title-text">Gráficos de Ensino Fundamental - Funções Docentes - {{municipio.nome}}</h2>
+            </div>
+			<div class="mdl-card__supporting-text">
+                <h6>Selecione as categorias para visualizar os dados no gráfico.</h6>
+                <div class="ui-grid ui-grid-responsive" style="width:250px;margin-bottom:10px">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-1"><p-checkbox name="grpCategories" value="1" [(ngModel)]="selectedCategories"></p-checkbox></div>
+                        <div class="ui-grid-col-11"><label class="ui-widget">Estadual</label></div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-1"><p-checkbox name="grpCategories" value="2" [(ngModel)]="selectedCategories"></p-checkbox></div>
+                        <div class="ui-grid-col-11"><label class="ui-widget">Federal</label></div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-1"><p-checkbox name="grpCategories" value="3" [(ngModel)]="selectedCategories"></p-checkbox></div>
+                        <div class="ui-grid-col-11"><label class="ui-widget">Municipal</label></div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-1"><p-checkbox name="grpCategories" value="4" [(ngModel)]="selectedCategories"></p-checkbox></div>
+                        <div class="ui-grid-col-11"><label class="ui-widget">Particular</label></div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-1"><p-checkbox name="grpCategories" value="5" [(ngModel)]="selectedCategories"></p-checkbox></div>
+                        <div class="ui-grid-col-11"><label class="ui-widget">Total</label></div>
+                    </div>
+                </div>
+				<p-lineChart [value]="data" width="640" height="320" [bezierCurve]="false" [responsive]="true"></p-lineChart>
+				<p-barChart [value]="data" width="640" height="320" [legend]="lgnd"></p-barChart>
+			</div>
+			<div #lgnd></div>
+		</div>
     </div>
 	
-    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="goBack()">
-        Voltar
-    </button>
+    <div class="mdl-cell mdl-cell--12-col">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="goBack()">
+            Voltar
+        </button>
+    </div>
     <div id="loader" *ngIf="isLoading">
         <img src="app/images/loading.gif" class="ajax-loader" />
     </div>

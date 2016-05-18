@@ -64,7 +64,6 @@ export class MunicipioComponent implements OnInit {
       }
 	  
 	  onNavigate(id){
-		  console.log(id)
 		this.router.navigate(['/Municipio-Detalhes', { id: id }])
 	  }
 }
