@@ -70,26 +70,12 @@
             </div>
 			<div class="mdl-card__supporting-text">
                 <h6>Selecione as categorias para visualizar os dados no gráfico.</h6>
-                <div class="ui-grid ui-grid-responsive" style="width:250px;margin-bottom:10px">
+                <div *ngFor="let categoria of categorias" class="ui-grid ui-grid-responsive" style="width:250px;margin-bottom:10px">
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-1"><p-checkbox name="grpCategories" value="1" [(ngModel)]="selectedCategories"></p-checkbox></div>
-                        <div class="ui-grid-col-11"><label class="ui-widget">Estadual</label></div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-1"><p-checkbox name="grpCategories" value="2" [(ngModel)]="selectedCategories"></p-checkbox></div>
-                        <div class="ui-grid-col-11"><label class="ui-widget">Federal</label></div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-1"><p-checkbox name="grpCategories" value="3" [(ngModel)]="selectedCategories"></p-checkbox></div>
-                        <div class="ui-grid-col-11"><label class="ui-widget">Municipal</label></div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-1"><p-checkbox name="grpCategories" value="4" [(ngModel)]="selectedCategories"></p-checkbox></div>
-                        <div class="ui-grid-col-11"><label class="ui-widget">Particular</label></div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-1"><p-checkbox name="grpCategories" value="5" [(ngModel)]="selectedCategories"></p-checkbox></div>
-                        <div class="ui-grid-col-11"><label class="ui-widget">Total</label></div>
+                        <div class="ui-grid-col-1">
+                            <p-checkbox name="grpCategories" value="{{categoria.id}}" (onChange)="getGraph()" [(ngModel)]="selectedCategories"></p-checkbox>
+                        </div>
+                        <div class="ui-grid-col-11"><label class="ui-widget">{{categoria.nome}}</label></div>
                     </div>
                 </div>
 				<p-lineChart [value]="data" width="640" height="320" [bezierCurve]="false" [responsive]="true"></p-lineChart>

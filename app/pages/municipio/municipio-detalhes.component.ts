@@ -2,7 +2,9 @@ import { Component, OnInit } from 'angular2/core';
 import { ROUTER_DIRECTIVES, RouteParams } from 'angular2/router';
 
 import { Municipio } from '../../models/municipio';
+import { Categoria } from '../../models/categoria';
 import { MunicipioService } from '../../services/municipio.service';
+import { CategoriaService } from '../../services/categoria.service';
 
 import { MDL } from '../../MaterialDesignLiteUpgradeElement';
 
@@ -17,7 +19,7 @@ import {LineChart, Checkbox} from 'primeng/primeng';
     selector: 'municipio',
     templateUrl: 'app/pages/municipio/municipio-detalhes.component.html',
     styleUrls: ['app/pages/municipio/municipio-detalhes.component.css'],
-    providers: [MunicipioService],
+    providers: [MunicipioService, CategoriaService],
     directives: [ROUTER_DIRECTIVES, MDL, ANGULAR2_GOOGLE_MAPS_DIRECTIVES, LineChart, Checkbox]
 })
 
@@ -31,6 +33,7 @@ export class MunicipioDetalhesComponent implements OnInit {
 	data: any;
     selectedGraphs: string[];
     selectedCategories: string[];
+    categorias: Array<Categoria>;
 
     markers: {
         lat: number;
@@ -38,12 +41,14 @@ export class MunicipioDetalhesComponent implements OnInit {
         label?: string;
     }[];
 
-    constructor(params: RouteParams, private _municipioService: MunicipioService) {
+    constructor(params: RouteParams, private _municipioService: MunicipioService, private _categoriaService: CategoriaService) {
         this.params = params;
         this.id = this.params.get('id');
         this.markers = new Array();
         this.selectedGraphs = new Array();
         this.selectedCategories = new Array();
+        
+        this.getCategorias();
 		
 		this.data = {
             labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -96,5 +101,24 @@ export class MunicipioDetalhesComponent implements OnInit {
 
     goBack() {
         window.history.back();
+    }
+    
+    getCategorias() {        
+        this.isLoading = true;
+        this._categoriaService
+        .getCategorias()
+        .subscribe(
+          categorias => { 
+            this.categorias = categorias;
+            this.isLoading = false;
+          },
+          error => {
+            this.errorMessage = <any>error;
+            this.isLoading = false;
+          });  
+      }
+    
+    getGraph(){
+        console.log("Abrir grafico1: " + this.selectedGraphs + " " + this.selectedCategories)
     }
 }

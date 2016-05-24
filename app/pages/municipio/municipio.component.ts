@@ -1,5 +1,5 @@
 import { Component, OnInit } from 'angular2/core';
-import { Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from 'angular2/router';
+import { Router } from 'angular2/router';
 
 import { Municipio } from '../../models/municipio';
 import { MunicipioService } from '../../services/municipio.service';
@@ -17,7 +17,7 @@ import {Column} from 'primeng/primeng';
   templateUrl: 'app/pages/municipio/municipio.component.html',
   styleUrls: ['app/pages/municipio/municipio.component.css'],
   providers: [MunicipioService],
-  directives: [ ROUTER_DIRECTIVES, MDL, DataTable, Column ]
+  directives: [ MDL, DataTable, Column ]
 })
 
 export class MunicipioComponent implements OnInit {

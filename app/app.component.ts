@@ -13,7 +13,7 @@ import { MDL } from './MaterialDesignLiteUpgradeElement';
   selector: 'edu-con',
   templateUrl: 'app/app.component.html',
     directives: [ROUTER_DIRECTIVES, MDL],
-    providers: [ROUTER_PROVIDERS]
+    providers: []
 })
 @RouteConfig([
   {
