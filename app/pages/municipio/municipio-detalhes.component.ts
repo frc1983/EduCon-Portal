@@ -3,8 +3,10 @@ import { ROUTER_DIRECTIVES, RouteParams } from 'angular2/router';
 
 import { Municipio } from '../../models/municipio';
 import { Categoria } from '../../models/categoria';
+import { TipoEnsino } from '../../models/tipoEnsino';
 import { MunicipioService } from '../../services/municipio.service';
 import { CategoriaService } from '../../services/categoria.service';
+import { TipoEnsinoService } from '../../services/tipoEnsino.service';
 
 import { MDL } from '../../MaterialDesignLiteUpgradeElement';
 
@@ -19,7 +21,7 @@ import {LineChart, Checkbox} from 'primeng/primeng';
     selector: 'municipio',
     templateUrl: 'app/pages/municipio/municipio-detalhes.component.html',
     styleUrls: ['app/pages/municipio/municipio-detalhes.component.css'],
-    providers: [MunicipioService, CategoriaService],
+    providers: [MunicipioService, CategoriaService, TipoEnsinoService],
     directives: [ROUTER_DIRECTIVES, MDL, ANGULAR2_GOOGLE_MAPS_DIRECTIVES, LineChart, Checkbox]
 })
 
@@ -30,10 +32,11 @@ export class MunicipioDetalhesComponent implements OnInit {
     errorMessage: string;
     isLoading: boolean = false;
     zoom: number = 14;
-	data: any;
+    data: any;
     selectedGraphs: string[];
     selectedCategories: string[];
     categorias: Array<Categoria>;
+    tiposEnsino: Array<TipoEnsino>;
 
     markers: {
         lat: number;
@@ -41,16 +44,20 @@ export class MunicipioDetalhesComponent implements OnInit {
         label?: string;
     }[];
 
-    constructor(params: RouteParams, private _municipioService: MunicipioService, private _categoriaService: CategoriaService) {
+    constructor(params: RouteParams,
+        private _municipioService: MunicipioService,
+        private _categoriaService: CategoriaService,
+        private _tipoEnsinoService: TipoEnsinoService) {
         this.params = params;
         this.id = this.params.get('id');
         this.markers = new Array();
         this.selectedGraphs = new Array();
         this.selectedCategories = new Array();
-        
+
         this.getCategorias();
-		
-		this.data = {
+        this.getTiposEnsino();
+
+        this.data = {
             labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
             datasets: [
                 {
@@ -102,23 +109,38 @@ export class MunicipioDetalhesComponent implements OnInit {
     goBack() {
         window.history.back();
     }
-    
-    getCategorias() {        
+
+    getCategorias() {
         this.isLoading = true;
         this._categoriaService
-        .getCategorias()
-        .subscribe(
-          categorias => { 
-            this.categorias = categorias;
-            this.isLoading = false;
-          },
-          error => {
-            this.errorMessage = <any>error;
-            this.isLoading = false;
-          });  
-      }
-    
-    getGraph(){
+            .getCategorias()
+            .subscribe(
+            categorias => {
+                this.categorias = categorias;
+                this.isLoading = false;
+            },
+            error => {
+                this.errorMessage = <any>error;
+                this.isLoading = false;
+            });
+    }
+
+    getTiposEnsino() {
+        this.isLoading = true;
+        this._tipoEnsinoService
+            .getTiposEnsino()
+            .subscribe(
+            tipos => {
+                this.tiposEnsino = tipos;
+                this.isLoading = false;
+            },
+            error => {
+                this.errorMessage = <any>error;
+                this.isLoading = false;
+            });
+    }
+
+    getGraph() {
         console.log("Abrir grafico1: " + this.selectedGraphs + " " + this.selectedCategories)
     }
 }

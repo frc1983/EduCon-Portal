@@ -42,22 +42,10 @@
 			<div class="mdl-card__supporting-text">                
                 <h6>Selecione os gráficos que deseja visualizar:</h6>
                 <h6>Um radio para cada categoria (Funções Docentes, Matrícula Inicial, etc.)</h6>
-                <div class="ui-grid ui-grid-responsive" style="width:250px;margin-bottom:10px">
+                <div *ngFor="let tipoEnsino of tiposEnsino" class="ui-grid ui-grid-responsive" style="width:250px;margin-bottom:10px">
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-1"><p-checkbox name="grpGraphs" value="1" [(ngModel)]="selectedGraphs"></p-checkbox></div>
-                        <div class="ui-grid-col-11"><label class="ui-widget">Funções Docentes</label></div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-1"><p-checkbox name="grpGraphs" value="2" [(ngModel)]="selectedGraphs"></p-checkbox></div>
-                        <div class="ui-grid-col-11"><label class="ui-widget">Matrícula Inicial</label></div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-1"><p-checkbox name="grpGraphs" value="3" [(ngModel)]="selectedGraphs"></p-checkbox></div>
-                        <div class="ui-grid-col-11"><label class="ui-widget">Número de Concluintes</label></div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-1"><p-checkbox name="grpGraphs" value="4" [(ngModel)]="selectedGraphs"></p-checkbox></div>
-                        <div class="ui-grid-col-11"><label class="ui-widget">Número de Estabelecimentos</label></div>
+                        <div class="ui-grid-col-1"><p-checkbox name="grpGraphs" value="{{tipoEnsino.id}}" [(ngModel)]="selectedGraphs"></p-checkbox></div>
+                        <div class="ui-grid-col-11"><label class="ui-widget">{{tipoEnsino.nome}}</label></div>
                     </div>
                 </div>
 			</div>
