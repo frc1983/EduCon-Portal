@@ -1,8 +1,8 @@
-import { Injectable } from 'angular2/core';
-import { Http, Response, RequestOptions } from 'angular2/http';
-import { Observable } from 'rxjs/Rx';
-import { TipoEnsino } from '../models/tipoEnsino';
-import { BaseService } from './base.service';
+import {Injectable} from 'angular2/core';
+import {Http, Response, RequestOptions} from 'angular2/http';
+import {Observable} from 'rxjs/Rx';
+import {TipoEnsino} from '../models/tipoEnsino';
+import {BaseService} from './base.service';
 
 @Injectable()
 export class TipoEnsinoService {
@@ -11,9 +11,9 @@ export class TipoEnsinoService {
     private _tipoEnsinoUrl = "http://localhost:58436/api/v1/tiposEnsino";
     
     getTiposEnsino() {
-            return this.http.get(this._tipoEnsinoUrl)
-                .map(obj => TipoEnsino.fromJSONArray(this._baseService.extractData(obj)))
-                .catch(this._baseService.handleError);
+        return this.http.get(this._tipoEnsinoUrl)
+            .map(obj => TipoEnsino.fromJSONArray(this._baseService.extractData(obj)))
+            .catch(this._baseService.handleError);
     }
 
     getTipoEnsinoPorId(id: string) {

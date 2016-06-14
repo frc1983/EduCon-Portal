@@ -12,6 +12,6 @@ export class Categoria {
   }
 
   static fromJSON(item: Object): Categoria {
-      return new Categoria(item);
+    return new Categoria(item);
   }
 }

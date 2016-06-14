@@ -1,8 +1,8 @@
-import { Injectable } from 'angular2/core';
-import { Http, Response, RequestOptions } from 'angular2/http';
-import { Observable } from 'rxjs/Rx';
-import { Categoria } from '../models/categoria';
-import { BaseService } from './base.service';
+import {Injectable} from 'angular2/core';
+import {Http, Response, RequestOptions} from 'angular2/http';
+import {Observable} from 'rxjs/Rx';
+import {Categoria} from '../models/categoria';
+import {BaseService} from './base.service';
 
 @Injectable()
 export class CategoriaService {
@@ -11,9 +11,9 @@ export class CategoriaService {
     private _categoriasUrl = "http://localhost:58436/api/v1/categorias";
     
     getCategorias() {
-            return this.http.get(this._categoriasUrl)
-                .map(obj => Categoria.fromJSONArray(this._baseService.extractData(obj)))
-                .catch(this._baseService.handleError);
+        return this.http.get(this._categoriasUrl)
+            .map(obj => Categoria.fromJSONArray(this._baseService.extractData(obj)))
+            .catch(this._baseService.handleError);
     }
 
     getCategoriaPorId(id: string) {

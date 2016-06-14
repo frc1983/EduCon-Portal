@@ -1,8 +1,8 @@
-import { Injectable } from 'angular2/core';
+import {Injectable} from 'angular2/core';
 import {Http, Response, RequestOptions} from 'angular2/http';
 import {Observable} from 'rxjs/Rx';
-import { Municipio } from '../models/municipio';
-import { BaseService } from './base.service';
+import {Municipio} from '../models/municipio';
+import {BaseService} from './base.service';
 
 @Injectable()
 export class MunicipioService {
