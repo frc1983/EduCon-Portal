@@ -8,23 +8,23 @@ import { BaseService } from './base.service';
 export class MunicipioService {
     constructor (private http: Http, private _baseService: BaseService) { }
     
-    private _municipiosUrl = "http://educon.apphb.com/api/municipio";
+    private _municipiosUrl = "http://localhost:58436/api/v1/municipios";
     
     getMunicipios() {
-            return this.http.get(this._municipiosUrl + "/Lista")
-                .map(obj => Municipio.fromJSONArray(this._baseService.extractData(obj)))
-                .catch(this._baseService.handleError);
-    }
-    
-    getMunicipioPorNome(nome: string) {
-        return this.http.get(this._municipiosUrl + "/ListaPorNome?nome=" + nome)
+        return this.http.get(this._municipiosUrl)
             .map(obj => Municipio.fromJSONArray(this._baseService.extractData(obj)))
             .catch(this._baseService.handleError);
     }
-
+    
     getMunicipioPorId(id: string) {
-        return this.http.get(this._municipiosUrl + "/ConsultaPorId?id=" + id)
+        return this.http.get(this._municipiosUrl + "?id=" + id)
             .map(obj => Municipio.fromJSON(this._baseService.extractData(obj)))
+            .catch(this._baseService.handleError);
+    }
+
+    getMunicipioPorNome(nome: string) {
+        return this.http.get(this._municipiosUrl + "/porNome/" + nome)
+            .map(obj => Municipio.fromJSONArray(this._baseService.extractData(obj)))
             .catch(this._baseService.handleError);
     }
 }
