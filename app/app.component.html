@@ -1,21 +1,26 @@
+<style>
+	.mdl-layout_drawer .mdl-navigation .mdl-navigation__link {
+		padding: 16px 25px !important;
+	}
+</style>
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
 	<header class="mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
 	<div aria-expanded="true" role="button" tabindex="0" class="mdl-layout__drawer-button"><i class="material-icons"></i></div>
 	<div class="mdl-layout__header-row">
-	 	<span class="mdl-layout-title">EduCon - Educação Conectada</span>
+	  <span class="mdl-layout-title">EduCon - Educação Conectada</span>
 	</div>
   </header>
 	<mld class="mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
 		<nav class="mdl-navigation mdl-color--blue-grey-800">
-		 	<a class="mdl-navigation__link" [routerLink]="['Home']"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>Home</a>
-			<a class="mdl-navigation__link" [routerLink]="['Busca']"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">busca</i>Busca</a>
-		 	<a class="mdl-navigation__link" [routerLink]="['Municipio']"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">município</i>Municipio</a>
-		 	<div class="mdl-layout-spacer"></div>
-		 	<a class="mdl-navigation__link" [routerLink]="['Olap']"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">olap</i>OLAP</a>
+		  <a class="mdl-navigation__link" [routerLink]="['Home']"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>Home</a>
+		  <a class="mdl-navigation__link" [routerLink]="['Municipio']"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">store</i>Busca de Municipio</a>
+		  <a class="mdl-navigation__link" [routerLink]="['Busca']"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">search</i>Comparar Municipio</a>
+		  <a class="mdl-navigation__link" [routerLink]="['Olap']"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">timeline</i>OLAP</a>
+		  <a class="mdl-navigation__link" [routerLink]="['Olap']"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">cloud</i>Importar Dados</a>
 		</nav>
 	</mld>
 	<main class="mdl-layout__content mdl-color--grey-100">
-		<router-outlet></router-outlet>
+			<router-outlet></router-outlet>
 	</main>
 	<div class="mdl-layout__obfuscator"></div>
 </div>
