@@ -14,7 +14,7 @@ export class Municipio {
   }
   
   static fromJSONArray(array: Array<Municipio>): Municipio[] {
-    return array.map(obj => new Municipio(obj);
+    return array.map(obj => new Municipio(obj));
   }
 
   static fromJSON(item: Object): Municipio {

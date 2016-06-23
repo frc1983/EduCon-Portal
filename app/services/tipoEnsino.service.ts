@@ -8,7 +8,7 @@ import {BaseService} from './base.service';
 export class TipoEnsinoService {
     constructor (private http: Http, private _baseService: BaseService) { }
     
-    private _tipoEnsinoUrl = "http://localhost:58436/api/v1/tiposEnsino";
+    private _tipoEnsinoUrl = "http://educon.apphb.com/api/v1/tiposEnsino/";
     
     getTiposEnsino() {
         return this.http.get(this._tipoEnsinoUrl)
@@ -17,7 +17,7 @@ export class TipoEnsinoService {
     }
 
     getTipoEnsinoPorId(id: string) {
-        return this.http.get(this._tipoEnsinoUrl + "id=" + id)
+        return this.http.get(this._tipoEnsinoUrl + id)
             .map(obj => TipoEnsino.fromJSON(this._baseService.extractData(obj)))
             .catch(this._baseService.handleError);
     }

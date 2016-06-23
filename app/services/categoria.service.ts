@@ -8,7 +8,7 @@ import {BaseService} from './base.service';
 export class CategoriaService {
     constructor (private http: Http, private _baseService: BaseService) { }
     
-    private _categoriasUrl = "http://localhost:58436/api/v1/categorias";
+    private _categoriasUrl = "http://educon.apphb.com/api/v1/categorias/";
     
     getCategorias() {
         return this.http.get(this._categoriasUrl)
@@ -17,7 +17,7 @@ export class CategoriaService {
     }
 
     getCategoriaPorId(id: string) {
-        return this.http.get(this._categoriasUrl + "?id=" + id)
+        return this.http.get(this._categoriasUrl + id)
             .map(obj => Categoria.fromJSON(this._baseService.extractData(obj)))
             .catch(this._baseService.handleError);
     }
