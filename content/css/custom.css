@@ -1,0 +1,7 @@
+.mdl-layout_drawer .mdl-navigation .mdl-navigation__link {
+	padding: 16px 25px !important;
+}
+
+.mdl-navigation__link .material-icons {
+	padding-right: 5px;
+}
