@@ -1,5 +1,5 @@
 <div mdl id="page-content-wrapper" class="mdl-grid ui-widget">
-    <h3 class="mdl-cell mdl-cell--12-col" [innerHTML]="municipio ? 'Municipio de ' + municipio.nome : 'Municipio'"></h3>
+    <h3 class="mdl-cell mdl-cell--12-col" [innerHTML]="municipio ? 'Município de ' + municipio.nome : 'Município'"></h3>
     <div class="error mdl-cell mdl-cell--12-col" *ngIf="errorMessage">{{errorMessage}}</div>
 
     <div id="detalhes-municipio" *ngIf="municipio" class="mdl-cell mdl-cell--12-col" >
@@ -78,6 +78,8 @@
             Voltar
         </button>
     </div>
+
     <div id="loader" *ngIf="isLoading">
         <img src="app/images/loading.gif" class="ajax-loader" />
     </div>
+</div>

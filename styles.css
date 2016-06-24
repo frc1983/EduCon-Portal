@@ -38,3 +38,7 @@ a .link-sublinhado {
 .card-left {
     margin: 8px !important;
 }
+
+.error{
+    color: red;
+}

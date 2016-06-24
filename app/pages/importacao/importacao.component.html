@@ -1,0 +1,34 @@
+<div mdl id="page-content-wrapper" class="mdl-grid">
+    <h3 class="mdl-cell mdl-cell--12-col">Importação de Dados para a Base EduCon</h3>
+    <div class="error" *ngIf="errorMessage">{{errorMessage}}</div>
+
+    <h4 class="mdl-cell mdl-cell--12-col">Dados já importados</h4>
+
+    <p-dataTable [value]="importacoes" [rows]="10" [paginator]="true" [responsive]="true" [totalRecords]="totalRecords" sortMode="multiple">
+        <p-column field="anoInicial" header="Ano" [sortable]="true"></p-column>
+        <p-column field="qtdRegistros" header="Total de Registros" [sortable]="true"></p-column>
+        <p-column field="data" header="Data de Importaçao" [sortable]="true"></p-column>
+        <p-column header="Reprocessar">
+            <template let-municipio="rowData">
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                        (click)="onReprocess(importacao.id)">
+                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                </button>
+            </template>
+        </p-column>
+    </p-dataTable>
+
+    <h4 class="mdl-cell mdl-cell--12-col">Enviar solicitação de dados</h4>
+
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input #anoImportacao class="mdl-textfield__input" type="text" id="sample3">
+        <label class="mdl-textfield__label" for="sample3">Ano dos dados</label>
+    </div>
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="reprocessar(anoImportacao.value); anoImportacao.value=''">
+        Enviar Solicitação
+    </button>
+
+</div>
+<div id="loader" *ngIf="isLoading">
+    <img src="app/images/loading.gif" class="ajax-loader" />
+</div>

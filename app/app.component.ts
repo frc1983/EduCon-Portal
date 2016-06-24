@@ -1,13 +1,14 @@
 import {Component} from 'angular2/core';
-import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from 'angular2/router';
+import {RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from 'angular2/router';
 import {bootstrap} from 'angular2/platform/browser';
 
-import { HomeComponent } from './pages/home/home.component';
-import { BuscaComponent } from './pages/busca/busca.component';
-import { MunicipioComponent } from './pages/municipio/municipio.component';
-import { OLAPComponent } from './pages/olap/olap.component';
-import { MunicipioDetalhesComponent } from './pages/municipio/municipio-detalhes.component';
-import { MDL } from './MaterialDesignLiteUpgradeElement';
+import {HomeComponent} from './pages/home/home.component';
+import {CompareComponent} from './pages/compare/compare.component';
+import {MunicipioComponent} from './pages/municipio/municipio.component';
+import {ImportacaoComponent} from './pages/importacao/importacao.component';
+import {OLAPComponent} from './pages/olap/olap.component';
+import {MunicipioDetalhesComponent} from './pages/municipio/municipio-detalhes.component';
+import {MDL} from './MaterialDesignLiteUpgradeElement';
 
 @Component({
   selector: 'edu-con',
@@ -22,9 +23,9 @@ import { MDL } from './MaterialDesignLiteUpgradeElement';
     component: HomeComponent,
     useAsDefault: true
   },{
-    path: '/busca',
-    name: 'Busca',
-    component: BuscaComponent
+    path: '/compare',
+    name: 'Compare',
+    component: CompareComponent
   },
   {
     path: '/municipio',
@@ -40,8 +41,14 @@ import { MDL } from './MaterialDesignLiteUpgradeElement';
       path: '/olap',
       name: 'Olap',
       component: OLAPComponent
+  },
+  {
+      path: '/importacao',
+      name: 'Importacao',
+      component: ImportacaoComponent
   }
 ])
+
 export class AppComponent {
   title = 'EduCon - Educação Conectada';
 }
