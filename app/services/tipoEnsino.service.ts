@@ -8,8 +8,8 @@ import {BaseService} from './base.service';
 export class TipoEnsinoService {
     constructor (private http: Http, private _baseService: BaseService) { }
     
-    private _tipoEnsinoUrl = _baseService.getUrl() + "v1/tiposEnsino/";
-    
+    private _tipoEnsinoUrl = this._baseService.getUrl() + "v1/tiposEnsino/";
+        
     getTiposEnsino() {
         return this.http.get(this._tipoEnsinoUrl)
             .map(obj => TipoEnsino.fromJSONArray(this._baseService.extractData(obj)))

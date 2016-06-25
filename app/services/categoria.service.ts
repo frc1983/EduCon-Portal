@@ -8,17 +8,17 @@ import {BaseService} from './base.service';
 export class CategoriaService {
     constructor (private http: Http, private _baseService: BaseService) { }
     
-    private _categoriasUrl = _baseService.getUrl() + "v1/categorias/";
+    private _categoriasUrl = this._baseService.getUrl() + "v1/categorias/";
     
     getCategorias() {
-        return this.http.get(this._categoriasUrl)
+        return this.http.get(this._categoriasUrl + "/categorias")
             .map(obj => Categoria.fromJSONArray(this._baseService.extractData(obj)))
             .catch(this._baseService.handleError);
     }
 
-    getCategoriaPorId(id: string) {
-        return this.http.get(this._categoriasUrl + id)
-            .map(obj => Categoria.fromJSON(this._baseService.extractData(obj)))
+    getSubCategorias() {
+        return this.http.get(this._categoriasUrl + "/subcategorias")
+            .map(obj => Categoria.fromJSONArray(this._baseService.extractData(obj)))
             .catch(this._baseService.handleError);
     }
 }

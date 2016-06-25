@@ -8,7 +8,7 @@ import {BaseService} from './base.service';
 export class MunicipioService {
     constructor (private http: Http, private _baseService: BaseService) { }
     
-    private _municipiosUrl = _baseService.getUrl() + "v1/municipios/";
+    private _municipiosUrl = this._baseService.getUrl() + "v1/municipios/";
     
     getMunicipios() {
         return this.http.get(this._municipiosUrl)

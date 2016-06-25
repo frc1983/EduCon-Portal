@@ -30,8 +30,7 @@ export class ImportacaoComponent implements OnInit {
 
     constructor(private router: Router, private _importacaoService: ImportacaoService) {
         setInterval(() => { 
-            this.getImportacoes(false); 
-            console.log("Interval")
+            this.getImportacoes(false);
         }, 1000 * 10);
      }
 
@@ -57,8 +56,8 @@ export class ImportacaoComponent implements OnInit {
             );
     }
 
-    novaImportacao(ano :number) {
-        console.log("ANO", ano);
+    novaImportacao(ano :string) {
+        this.errorMessage = "";
         this._importacaoService.novaImportacao(ano)
         .subscribe(
             importacoes => {
@@ -70,8 +69,8 @@ export class ImportacaoComponent implements OnInit {
             });
     }
 
-    reprocessar(id: number){
-        console.log("IID", id)
+    reprocessar(id: string){
+        this.errorMessage = "";
         this._importacaoService.putReprocessar(id)
         .subscribe(
             importacoes => {
