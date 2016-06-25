@@ -5,6 +5,10 @@ import {Response, RequestOptions} from 'angular2/http';
 @Injectable()
 export class BaseService {
 
+    private getUrl() {
+        return "http://localhost:58436/api/";
+    }
+
     public extractData(res: Response) {
         if (res.status < 200 || res.status >= 300)
             throw new Error('Bad response status: ' + res.status);

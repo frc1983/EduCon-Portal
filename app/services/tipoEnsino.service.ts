@@ -8,7 +8,7 @@ import {BaseService} from './base.service';
 export class TipoEnsinoService {
     constructor (private http: Http, private _baseService: BaseService) { }
     
-    private _tipoEnsinoUrl = "http://educon.apphb.com/api/v1/tiposEnsino/";
+    private _tipoEnsinoUrl = _baseService.getUrl() + "v1/tiposEnsino/";
     
     getTiposEnsino() {
         return this.http.get(this._tipoEnsinoUrl)

@@ -8,7 +8,7 @@ import {BaseService} from './base.service';
 export class CategoriaService {
     constructor (private http: Http, private _baseService: BaseService) { }
     
-    private _categoriasUrl = "http://educon.apphb.com/api/v1/categorias/";
+    private _categoriasUrl = _baseService.getUrl() + "v1/categorias/";
     
     getCategorias() {
         return this.http.get(this._categoriasUrl)
