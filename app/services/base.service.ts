@@ -19,12 +19,7 @@ export class BaseService {
 
     public handleError(error: any) {
         // In a real world app, we might send the error to remote logging infrastructure
-        let errMsg = error.message || 'Server error';
-        console.log(error);
-        console.log("ERRO STATUS", error.status); // log to console instead
-        let j = error._body;
-        console.log(j); // log to console instead
-        console.log("ERRO JSON BODY", JSON.parse(j));
+        let errMsg = JSON.parse(error._body).mensagem || 'Server error';
         return Observable.throw(errMsg);
     }
 }
