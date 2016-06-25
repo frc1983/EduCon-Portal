@@ -26,15 +26,23 @@ export class ImportacaoComponent implements OnInit {
     importacoes: Array<Importacao>;
     errorMessage: string;
     isLoading: boolean = false;
+    importacaoSelected: Importacao;
 
-    constructor(private router: Router, private _importacaoService: ImportacaoService) { }
+    constructor(private router: Router, private _importacaoService: ImportacaoService) {
+        setInterval(() => { 
+            this.getImportacoes(false); 
+            console.log("Interval")
+        }, 1000 * 10);
+     }
 
     ngOnInit() {
-        this.getImportacoes();
+        this.getImportacoes(true);
     }
 
-    getImportacoes() {
-        this.isLoading = true;
+    getImportacoes(showLoader: boolean) {
+        if(showLoader)
+            this.isLoading = true;
+
         this._importacaoService
             .getImportacoes()
             .subscribe(
@@ -49,7 +57,29 @@ export class ImportacaoComponent implements OnInit {
             );
     }
 
-    reprocessar(id :number) {
-        console.log("ID", id);
+    novaImportacao(ano :number) {
+        console.log("ANO", ano);
+        this._importacaoService.novaImportacao(ano)
+        .subscribe(
+            importacoes => {
+                this.isLoading = false;
+            },
+            error => {
+                this.errorMessage = <any>error;
+                this.isLoading = false;
+            });
+    }
+
+    reprocessar(id: number){
+        console.log("IID", id)
+        this._importacaoService.putReprocessar(id)
+        .subscribe(
+            importacoes => {
+                this.isLoading = false;
+            },
+            error => {
+                this.errorMessage = <any>error;
+                this.isLoading = false;
+            });
     }
 }
