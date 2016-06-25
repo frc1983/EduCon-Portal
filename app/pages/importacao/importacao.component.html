@@ -2,13 +2,13 @@
     <h3 class="mdl-cell mdl-cell--12-col">Importação de Dados para a Base EduCon</h3>
     <div class="error" *ngIf="errorMessage">{{errorMessage}}</div>
 
-    <h4 class="mdl-cell mdl-cell--12-col">Dados já importados</h4>
+    <h4 class="mdl-cell mdl-cell--12-col">Solicitações efetuadas</h4>
 
     <p-dataTable [value]="importacoes" [rows]="10" [paginator]="true" [responsive]="true" [totalRecords]="totalRecords" sortMode="multiple">
         <p-column field="anoInicial" header="Ano" [sortable]="true"></p-column>
-        <p-column field="qtdRegistros" header="Total de Registros" [sortable]="true"></p-column>
         <p-column field="data" header="Data de Importaçao" [sortable]="true"></p-column>
         <p-column field="situacao" header="Situação do Processamento" [sortable]="true"></p-column>
+        <p-column field="qtdRegistros" header="Total de Registros" [sortable]="true"></p-column>
         <p-column header="Reprocessar">
             <template let-importacao="rowData">
                 <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
@@ -27,7 +27,6 @@
     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="novaImportacao(anoImportacao.value); anoImportacao.value=''">
         Enviar Solicitação
     </button>
-
 </div>
 <div id="loader" *ngIf="isLoading">
     <img src="app/images/loading.gif" class="ajax-loader" />
