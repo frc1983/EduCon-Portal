@@ -4,9 +4,14 @@ import { ROUTER_DIRECTIVES, RouteParams } from 'angular2/router';
 import { Municipio } from '../../models/municipio';
 import { Categoria } from '../../models/categoria';
 import { TipoEnsino } from '../../models/tipoEnsino';
+import { Dado } from '../../models/dado';
+import { Data } from '../../models/data';
+import { Grafico } from '../../models/grafico';
 import { MunicipioService } from '../../services/municipio.service';
 import { CategoriaService } from '../../services/categoria.service';
 import { TipoEnsinoService } from '../../services/tipoEnsino.service';
+import { DadoService } from '../../services/dado.service';
+import { DataService } from '../../services/data.service';
 
 import { MDL } from '../../MaterialDesignLiteUpgradeElement';
 
@@ -21,7 +26,7 @@ import {LineChart, Checkbox} from 'primeng/primeng';
     selector: 'municipio',
     templateUrl: 'app/pages/municipio/municipio-detalhes.component.html',
     styleUrls: ['app/pages/municipio/municipio-detalhes.component.css'],
-    providers: [MunicipioService, CategoriaService, TipoEnsinoService],
+    providers: [MunicipioService, CategoriaService, TipoEnsinoService, DadoService, DataService],
     directives: [ROUTER_DIRECTIVES, MDL, ANGULAR2_GOOGLE_MAPS_DIRECTIVES, LineChart, Checkbox]
 })
 
@@ -32,11 +37,11 @@ export class MunicipioDetalhesComponent implements OnInit {
     errorMessage: string;
     isLoading: boolean = false;
     zoom: number = 14;
-    data: any;
-    selectedGraphs: string[];
-    selectedCategories: string[];
+    selectedGraphs: Array<Grafico>;    
     categorias: Array<Categoria>;
+    subcategorias: Array<Categoria>;
     tiposEnsino: Array<TipoEnsino>;
+    anos: Array<Data>;
 
     markers: {
         lat: number;
@@ -47,41 +52,19 @@ export class MunicipioDetalhesComponent implements OnInit {
     constructor(params: RouteParams,
         private _municipioService: MunicipioService,
         private _categoriaService: CategoriaService,
-        private _tipoEnsinoService: TipoEnsinoService) {
+        private _tipoEnsinoService: TipoEnsinoService,
+        private _dadosService: DadoService,
+        private _dataService: DataService) {
         this.params = params;
         this.id = this.params.get('id');
         this.markers = new Array();
         this.selectedGraphs = new Array();
-        this.selectedCategories = new Array();
+        this.anos = new Array();
 
         this.getCategorias();
+        this.getSubCategorias();
         this.getTiposEnsino();
-
-        this.data = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-                {
-                    label: 'My First dataset',
-                    fillColor: 'rgba(220,220,220,0.2)',
-                    strokeColor: 'rgba(220,220,220,1)',
-                    pointColor: 'rgba(220,220,220,1)',
-                    pointStrokeColor: '#fff',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(220,220,220,1)',
-                    data: [65, 59, 80, 81, 56, 55, 40]
-                },
-                {
-                    label: 'My Second dataset',
-                    fillColor: 'rgba(151,187,205,0.2)',
-                    strokeColor: 'rgba(151,187,205,1)',
-                    pointColor: 'rgba(151,187,205,1)',
-                    pointStrokeColor: '#fff',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(151,187,205,1)',
-                    data: [28, 48, 40, 19, 86, 27, 90]
-                }
-            ]
-        }
+        this.getAnos();
     }
 
     ngOnInit() {
@@ -125,6 +108,21 @@ export class MunicipioDetalhesComponent implements OnInit {
             });
     }
 
+    getSubCategorias() {
+        this.isLoading = true;
+        this._categoriaService
+            .getSubCategorias()
+            .subscribe(
+            subcategorias => {
+                this.subcategorias = subcategorias;
+                this.isLoading = false;
+            },
+            error => {
+                this.errorMessage = <any>error;
+                this.isLoading = false;
+            });
+    }
+
     getTiposEnsino() {
         this.isLoading = true;
         this._tipoEnsinoService
@@ -140,7 +138,148 @@ export class MunicipioDetalhesComponent implements OnInit {
             });
     }
 
-    getGraph() {
-        console.log("Abrir grafico1: " + this.selectedGraphs + " " + this.selectedCategories)
+    getAnos() {
+        this.isLoading = true;
+        this._dataService
+            .getAnos()
+            .subscribe(
+            anos => {
+                this.anos = anos;
+                this.isLoading = false;
+            },
+            error => {
+                this.errorMessage = <any>error;
+                this.isLoading = false;
+            });
+    }
+
+    getGraph(grafico, categoria, event) {
+        
+        this.setSelectedCategories(grafico, categoria, event);
+        if(event.target.checked){
+            this.isLoading = true;
+            this._dadosService
+                .getDadoPorMunicipioTipoCategoria(this.municipio.id.toString(), grafico.tipoEnsino.id, categoria)
+                .subscribe(
+                dado => {
+                    if(dado.length > 0) {
+                        grafico.dados.push(dado);                        
+                    }
+                    this.isLoading = false;
+                    this.setGraphData(grafico, categoria, null, event, false);
+                },
+                error => {
+                    this.errorMessage = <any>error;
+                    this.isLoading = false;
+                });
+        } else {
+            grafico.dados = [];
+        }
+
+        console.log(this.selectedGraphs)
+    }
+
+    setGraphData(grafico: Grafico, categoria: Categoria, subcategoria, event, firstTime){
+
+        if(subcategoria != null){
+            this.setSelectedSubCategories(grafico, categoria, subcategoria, event);
+        }
+
+        if(firstTime){
+            let anosArray = new Array();
+            this.anos.forEach(x => {
+                //if(anosArray.indexOf(x.ano) == -1)
+                    anosArray.push(x.ano)
+            });
+
+            grafico.selectedCategories.forEach(x => {
+                if(x.id == categoria.id){
+                    x.data = {
+                        labels: anosArray,
+                        datasets: []
+                    }
+                }
+            })
+        }
+        
+        grafico.selectedCategories.forEach(x => {
+            if(x.id == categoria.id){
+                x.selectedSubCategories.forEach(sub => {
+                    let dadosArray = new Array();
+                    grafico.dados.forEach(x => x.forEach(y => {
+                        if(subcategoria != null){
+                            if(y.idSubcategoria == sub.id && y.idCategoria == categoria.id){
+                                dadosArray.push(y);
+                            }
+                        }
+                    }));
+
+                    let valoresArray = [];
+                    dadosArray.forEach((x, i) => {
+                        valoresArray.push(x.valor)
+                    });
+
+                    x.data.datasets.push({
+                        label: sub.nome,
+                        fillColor: 'rgba(220,220,220,0.2)',
+                        strokeColor: 'rgba(220,220,220,1)',
+                        pointColor: 'rgba(220,220,220,1)',
+                        pointStrokeColor: '#fff',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(220,220,220,1)',
+                        data: valoresArray
+                    });
+                })
+            }
+        });        
+    }
+
+    setSelectedGraph(obj, event) {        
+        if(event.target.checked){
+            let graf = new Grafico();
+            graf.tipoEnsino = obj;
+            this.selectedGraphs.push(graf);
+        }
+        else if (!event.target.checked){            
+            let indexx = this.selectedGraphs.indexOf(obj);
+            this.selectedGraphs.splice(indexx,1);
+        }
+    }
+
+    setSelectedCategories(grafico, obj, event) {        
+        if(event.target.checked){
+            grafico.selectedCategories.push(obj);
+        }
+        else if (!event.target.checked){            
+            let indexx = grafico.selectedCategories.indexOf(obj);
+            grafico.selectedCategories.splice(indexx,1);
+        }
+    }
+
+    setSelectedSubCategories(grafico, categoria, obj, event) {        
+        if(event.target.checked){
+            grafico.selectedCategories.forEach(x => {
+                if(x.id == categoria.id){
+                    x.selectedSubCategories.push(obj);
+                }
+            })
+        }
+        else if (!event.target.checked){
+            grafico.selectedCategories.forEach(x => {
+                if(x.id == categoria.id){
+                    let indexx = x.selectedSubCategories.indexOf(obj);
+                    x.selectedSubCategories.splice(indexx,1);
+                }
+            })            
+        }
+    }
+
+    setDado(grafico, dado, event) {
+        if(event.target.checked){
+            grafico.dados.push(dado);
+        }
+        else if (!event.target.checked){  
+            grafico.dados = [];
+        }
     }
 }
