@@ -231,8 +231,7 @@ export class MunicipioDetalhesComponent implements OnInit {
 
                     let valoresArray = [];
                     dadosArray.forEach((x, i) => {
-                        let val = x.valor.replace(',','')
-                        val = x.valor.replace('.','')
+                        let val = x.valor.replace(',','').replace('.','')
                         valoresArray.push(val)
                     });
 
