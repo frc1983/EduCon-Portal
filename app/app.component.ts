@@ -8,6 +8,7 @@ import {MunicipioComponent} from './pages/municipio/municipio.component';
 import {ImportacaoComponent} from './pages/importacao/importacao.component';
 import {OLAPComponent} from './pages/olap/olap.component';
 import {MunicipioDetalhesComponent} from './pages/municipio/municipio-detalhes.component';
+import {SobreComponent} from './pages/sobre/sobre.component';
 import {MDL} from './MaterialDesignLiteUpgradeElement';
 
 @Component({
@@ -22,7 +23,8 @@ import {MDL} from './MaterialDesignLiteUpgradeElement';
     name: 'Home',
     component: HomeComponent,
     useAsDefault: true
-  },{
+  },
+  {
     path: '/compare',
     name: 'Compare',
     component: CompareComponent
@@ -33,19 +35,24 @@ import {MDL} from './MaterialDesignLiteUpgradeElement';
     component: MunicipioComponent
   },
   {
-      path: '/municipio-detalhes/:id',
-      name: 'Municipio-Detalhes',
-      component: MunicipioDetalhesComponent
+    path: '/municipio-detalhes/:id',
+    name: 'Municipio-Detalhes',
+    component: MunicipioDetalhesComponent
   },
   {
-      path: '/olap',
-      name: 'Olap',
-      component: OLAPComponent
+    path: '/olap',
+    name: 'Olap',
+    component: OLAPComponent
   },
   {
-      path: '/importacao',
-      name: 'Importacao',
-      component: ImportacaoComponent
+    path: '/importacao',
+    name: 'Importacao',
+    component: ImportacaoComponent
+  },
+  {
+    path: '/sobre',
+    name: 'Sobre',
+    component: SobreComponent
   }
 ])
 
