@@ -6,13 +6,25 @@ import { MDL } from '../../MaterialDesignLiteUpgradeElement';
 import 'rxjs/Rx';
 import {Observable} from 'rxjs/Observable';
 
+import { Municipio } from '../../models/municipio';
+import { Categoria } from '../../models/categoria';
+import { TipoEnsino } from '../../models/tipoEnsino';
+import { Dado } from '../../models/dado';
+import { Data } from '../../models/data';
+
+import { MunicipioService } from '../../services/municipio.service';
+import { CategoriaService } from '../../services/categoria.service';
+import { TipoEnsinoService } from '../../services/tipoEnsino.service';
+import { DadoService } from '../../services/dado.service';
+import { DataService } from '../../services/data.service';
+
 import {IgPivotDataSelectorComponent, IgPivotGridComponent} from "../../../IgniteUI/src/igniteui.angular2.ts";
 
 @Component({
   selector: 'olap',
   templateUrl: 'app/pages/olap/olap.component.html',
   styleUrls: ['app/pages/olap/olap.component.css'],
-  providers: [],
+  providers: [MunicipioService, CategoriaService, TipoEnsinoService, DadoService, DataService],
   directives: [ ROUTER_DIRECTIVES, MDL, IgPivotDataSelectorComponent, IgPivotGridComponent ]
 })
 
@@ -24,76 +36,185 @@ export class OLAPComponent implements OnInit {
 	private optsSelector: IgPivotDataSelector;
 	private selectorId: string;
 	private gridId: string;
-	private data: any;
-    
-    constructor(private router: Router) { }
 	
-      ngOnInit() {
-        this.data = new jQuery.ig.OlapFlatDataSource({
+	municipios: Array<Municipio>;
+	categorias: Array<Categoria>;
+    subcategorias: Array<Categoria>;
+    tiposEnsino: Array<TipoEnsino>;
+    anos: Array<Data>;
+	dados: any;
+    
+    constructor(private router: Router,
+		private _municipioService: MunicipioService,
+        private _categoriaService: CategoriaService,
+        private _tipoEnsinoService: TipoEnsinoService,
+        private _dadosService: DadoService,
+        private _dataService: DataService) { 
+			this.municipios = new Array();
+			this.categorias = new Array();
+			this.subcategorias = new Array();
+			this.tiposEnsino = new Array();
+			this.anos = new Array();
+			this.dados = new Array();
+		}
+	
+	ngOnInit() {		  
+		this.getMunicipios();
+		this.getCategorias();
+		this.getSubCategorias();
+		this.getTiposEnsino();
+		this.getAnos();
+		this.getDados();
+
+		this.selectorId = "dataSelector";
+		this.gridId = "pivotGrid";
+
+		this.optsGrid = {
+			dataSource: this.dados
+		};
+
+		this.optsSelector = {
+			dataSource: this.dados
+		};
+	}
+	  
+	getMunicipios() {
+        this.isLoading = true;
+        this._municipioService
+            .getMunicipios()
+            .subscribe(
+            municipios => {
+                this.municipios = municipios;
+                this.isLoading = false;
+            },
+            error => {
+                this.errorMessage = <any>error;
+                this.isLoading = false;
+            });
+    }
+
+    getCategorias() {
+        this.isLoading = true;
+        this._categoriaService
+            .getCategorias()
+            .subscribe(
+            categorias => {
+                this.categorias = categorias;
+                this.isLoading = false;
+            },
+            error => {
+                this.errorMessage = <any>error;
+                this.isLoading = false;
+            });
+    }
+
+    getSubCategorias() {
+        this.isLoading = true;
+        this._categoriaService
+            .getSubCategorias()
+            .subscribe(
+            subcategorias => {
+                this.subcategorias = subcategorias;
+                this.isLoading = false;
+            },
+            error => {
+                this.errorMessage = <any>error;
+                this.isLoading = false;
+            });
+    }
+
+    getTiposEnsino() {
+        this.isLoading = true;
+        this._tipoEnsinoService
+            .getTiposEnsino()
+            .subscribe(
+            tipos => {
+                this.tiposEnsino = tipos;
+                this.isLoading = false;
+            },
+            error => {
+                this.errorMessage = <any>error;
+                this.isLoading = false;
+            });
+    }
+
+    getAnos() {
+        this.isLoading = true;
+        this._dataService
+            .getAnos()
+            .subscribe(
+            anos => {
+                this.anos = anos;
+                this.isLoading = false;
+            },
+            error => {
+                this.errorMessage = <any>error;
+                this.isLoading = false;
+            });
+    }
+	
+	getDados(){
+		this.dados = this.getDataSource();
+	}
+	
+	getDataSource(){
+		return new jQuery.ig.OlapFlatDataSource({
 			dataSource:
-			[{ "ProductCategory": "Clothing", "UnitPrice": 12.81, "SellerName": "Stanley Brooker", "Country": "Bulgaria", "City": "Plovdiv", "Date": "01/01/2012", "UnitsSold": 282 },
-			{ "ProductCategory": "Clothing", "UnitPrice": 49.57, "SellerName": "Elisa Longbottom", "Country": "US", "City": "New York", "Date": "01/05/2013", "UnitsSold": 296 },
-			{ "ProductCategory": "Bikes", "UnitPrice": 3.56, "SellerName": "Lydia Burson", "Country": "Uruguay", "City": "Ciudad de la Costa", "Date": "01/06/2011", "UnitsSold": 68 },
-			{ "ProductCategory": "Accessories", "UnitPrice": 85.58, "SellerName": "David Haley", "Country": "UK", "City": "London", "Date": "04/07/2012", "UnitsSold": 293 },
-			{ "ProductCategory": "Components", "UnitPrice": 18.13, "SellerName": "John Smith", "Country": "Japan", "City": "Yokohama", "Date": "12/08/2012", "UnitsSold": 240 },
-			{ "ProductCategory": "Clothing", "UnitPrice": 68.33, "SellerName": "Larry Lieb", "Country": "Uruguay", "City": "Ciudad de la Costa", "Date": "05/12/2011", "UnitsSold": 456 },
-			{ "ProductCategory": "Components", "UnitPrice": 16.05, "SellerName": "Walter Pang", "Country": "Bulgaria", "City": "Sofia", "Date": "02/19/2013", "UnitsSold": 492 }],
+			[{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2010","valor": 10.0},
+{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2011","valor": 12.0},
+{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2012","valor": 3.0},
+{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2013","valor": 6.0},
+{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2014","valor": 7.0},
+{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2015","valor": 11.0}],
 			metadata: {
 				cube: {
-					name: "Sales",
-					caption: "Sales",
+					name: "Totais",
+					caption: "Totais",
 					measuresDimension: {
-						caption: "Measures",
+						caption: "Metricas",
 						measures: [ //for each measure, name and aggregator are required
 							{
-								caption: "Units Sold", name: "UnitsSold",
+								caption: "Valor", name: "Valor",
 								// returns a function that will be used as sum aggregator on the 'UnitsSold property' of the data objects
-								aggregator: jQuery.ig.OlapUtilities.prototype.sumAggregator('UnitsSold')
+								aggregator: jQuery.ig.OlapUtilities.prototype.sumAggregator('valor')
 							}]
 					},
 					dimensions: [ // for each dimension name and hierarchies are required
 						{
-							caption: "Seller", name: "Seller", hierarchies: [{
-								caption: "Seller", name: "Seller", levels: [
+							caption: "Municipio", name: "Municipio", hierarchies: [{
+								caption: "Municipio", name: "Municipio", levels: [
 									{
-										name: "AllSellers", caption: "All Sellers",
-										memberProvider: function (item) { return "All Sellers"; }
+										name: "AllMunicipio", caption: "Todos Municipios",
+										memberProvider: function (item) { return "Todos Municipios"; }
 									},
 									{
-										name: "SellerName", caption: "Seller",
-										memberProvider: function (item) { return item.SellerName; }
+										name: "MunicipioName", caption: "Municipio",
+										memberProvider: function (item) { return item.Municipio; }
 									}]
 							}]
 						},
 						{
-							caption: "Date", name: "Date", /*displayFolder: "Folder1\\Folder2",*/ hierarchies: [
+							caption: "Data", name: "Data", /*displayFolder: "Folder1\\Folder2",*/ hierarchies: [
 								jQuery.ig.OlapUtilities.prototype.getDateHierarchy(
-									"Date", // the source property name
-									["year", "quarter", "month", "date"], // the date parts for which levels will be generated (optional)
-									"Dates", // The name for the hierarchy (optional)
-									"Date", // The caption for the hierarchy (optional)
-									["Year", "Quarter", "Month", "Day"], // the captions for the levels (optional)
-									"All Periods") // the root level caption (optional)
+									"Data", // the source property name
+									["year"], // the date parts for which levels will be generated (optional)
+									"Datas", // The name for the hierarchy (optional)
+									"Data", // The caption for the hierarchy (optional)
+									["Year"], // the captions for the levels (optional)
+									"Todos Anos") // the root level caption (optional)
 							]
 						}
 					]
 				}
 			},
 			// Preload hierarchies for the rows, columns, filters and measures
-			rows: "[Date].[Dates]",
-			columns: "[Seller].[Seller]",
-			measures: "[Measures].[UnitsSold]"
+			rows: "[Data].[Datas]",
+			columns: "[Municipio].[Municipio]",
+			measures: "[Metricas].[Valor]"
 		});
-
-		this.selectorId = "dataSelector";
-		this.gridId = "pivotGrid";
-
-		this.optsGrid = {
-			dataSource: this.data
-		};
-
-		this.optsSelector = {
-			dataSource: this.data
-		};
-      }
+	}
+	
+	goBack() {
+        window.history.back();
+    }
 }

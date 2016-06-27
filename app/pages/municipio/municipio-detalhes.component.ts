@@ -59,15 +59,14 @@ export class MunicipioDetalhesComponent implements OnInit {
         this.id = this.params.get('id');
         this.markers = new Array();
         this.selectedGraphs = new Array();
-        this.anos = new Array();
-
-        this.getCategorias();
-        this.getTiposEnsino();
-        this.getAnos();
+        this.anos = new Array();        
     }
 
     ngOnInit() {
-        this.getMunicipio()
+        this.getMunicipio();
+        this.getCategorias();
+        this.getTiposEnsino();
+        this.getAnos();
     }
 
     getMunicipio() {
@@ -86,10 +85,6 @@ export class MunicipioDetalhesComponent implements OnInit {
                 this.errorMessage = <any>error;
                 this.isLoading = false;
             });
-    }
-
-    goBack() {
-        window.history.back();
     }
 
     getCategorias() {
@@ -345,5 +340,9 @@ export class MunicipioDetalhesComponent implements OnInit {
         ]
 
         return arrayColor;
+    }
+    
+    goBack() {
+        window.history.back();
     }
 }
