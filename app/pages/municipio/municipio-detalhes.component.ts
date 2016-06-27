@@ -62,7 +62,6 @@ export class MunicipioDetalhesComponent implements OnInit {
         this.anos = new Array();
 
         this.getCategorias();
-        this.getSubCategorias();
         this.getTiposEnsino();
         this.getAnos();
     }
@@ -108,13 +107,13 @@ export class MunicipioDetalhesComponent implements OnInit {
             });
     }
 
-    getSubCategorias() {
+    getSubCategorias(dados) {
         this.isLoading = true;
         this._categoriaService
             .getSubCategorias()
             .subscribe(
             subcategorias => {
-                this.subcategorias = subcategorias;
+                this.AtualizaSubcategorias(dados, subcategorias)
                 this.isLoading = false;
             },
             error => {
@@ -167,6 +166,9 @@ export class MunicipioDetalhesComponent implements OnInit {
                     }
                     this.isLoading = false;
                     this.setGraphData(grafico, categoria, null, event, false);
+                    this.getSubCategorias(grafico.dados);
+                    
+                    
                 },
                 error => {
                     this.errorMessage = <any>error;
@@ -177,6 +179,19 @@ export class MunicipioDetalhesComponent implements OnInit {
         }
 
         console.log(this.selectedGraphs)
+    }
+
+    AtualizaSubcategorias(dados, subcategorias){
+        let subsLocal = [];
+        dados.forEach(x => x.forEach(y => {
+            subcategorias.forEach(z => {
+                if(y.idSubcategoria == z.id && subsLocal.indexOf(z) == -1) {
+                    subsLocal.push(z);
+                    return;
+                }
+            });
+        }));
+        this.subcategorias = subsLocal;
     }
 
     setGraphData(grafico: Grafico, categoria: Categoria, subcategoria, event, firstTime){
@@ -204,7 +219,7 @@ export class MunicipioDetalhesComponent implements OnInit {
         
         grafico.selectedCategories.forEach(x => {
             if(x.id == categoria.id){
-                x.selectedSubCategories.forEach(sub => {
+                x.selectedSubCategories.forEach((sub, i) => {
                     let dadosArray = new Array();
                     grafico.dados.forEach(x => x.forEach(y => {
                         if(subcategoria != null){
@@ -216,17 +231,20 @@ export class MunicipioDetalhesComponent implements OnInit {
 
                     let valoresArray = [];
                     dadosArray.forEach((x, i) => {
-                        valoresArray.push(x.valor)
+                        let val = x.valor.replace(',','')
+                        val = x.valor.replace('.','')
+                        valoresArray.push(val)
                     });
 
                     x.data.datasets.push({
                         label: sub.nome,
-                        fillColor: 'rgba(220,220,220,0.2)',
-                        strokeColor: 'rgba(220,220,220,1)',
-                        pointColor: 'rgba(220,220,220,1)',
+                        fill: false,
+                        fillColor: this.getColor()[i].fillColor,
+                        strokeColor: this.getColor()[i].strokeColor,
+                        pointColor: this.getColor()[i].pointColor,
                         pointStrokeColor: '#fff',
                         pointHighlightFill: '#fff',
-                        pointHighlightStroke: 'rgba(220,220,220,1)',
+                        pointHighlightStroke: this.getColor()[i].fillColor,
                         data: valoresArray
                     });
                 })
@@ -281,5 +299,52 @@ export class MunicipioDetalhesComponent implements OnInit {
         else if (!event.target.checked){  
             grafico.dados = [];
         }
+    }
+
+    getColor(){
+        let arrayColor = [
+            {
+                fillColor: 'rgba(220,220,220,0)',
+                strokeColor: 'rgba(215, 40, 40, 0.9)',
+                pointColor: 'rgba(215, 40, 40, 0.9)'
+            },
+            {
+                fillColor: 'rgba(20,220,220,0)',
+                strokeColor: 'rgba(215, 44, 131, 0.9)',
+                pointColor: 'rgba(215, 44, 131, 0.9)'
+            },
+            {
+                fillColor: 'rgba(220,220,20,0)',
+                strokeColor: 'rgba(255, 175, 0, 0.9)',
+                pointColor: 'rgba(255, 175, 0, 0.9)'
+            },
+            {
+                fillColor: 'rgba(2,220,220,0)',
+                strokeColor: 'rgba(0, 165, 0, 0.9)',
+                pointColor: 'rgba(0, 165, 0, 0.9)'
+            },
+            {
+                fillColor: 'rgba(20,2,220,0)',
+                strokeColor: 'rgba(0, 0, 0, 0.9)',
+                pointColor: 'rgba(0, 0, 0, 0.9)'
+            },
+            {
+                fillColor: 'rgba(220,0,20,0)',
+                strokeColor: 'rgba(220,0,220,1)',
+                pointColor: 'rgba(220,0,220,1)'
+            },
+            {
+                fillColor: 'rgba(20,2,220,0)',
+                strokeColor: 'rgba(96, 230, 255, 0.9)',
+                pointColor: 'rgba(96, 230, 255, 0.9)'
+            },
+            {
+                fillColor: 'rgba(220,0,20,0)',
+                strokeColor: 'rgba(196, 117, 97, 0.9)',
+                pointColor: 'rgba(196, 117, 97, 0.9)'
+            }
+        ]
+
+        return arrayColor;
     }
 }

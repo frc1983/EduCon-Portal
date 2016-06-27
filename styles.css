@@ -42,3 +42,14 @@ a .link-sublinhado {
 .error{
     color: red;
 }
+
+ul {
+    list-style-type: none !important;
+}
+.line-legend span {    
+    height: 10px;
+    width: 10px;
+    display: block;
+    float: left;
+    margin: 7px;
+}
