@@ -154,24 +154,18 @@ export class OLAPComponent implements OnInit {
     }
 	
 	getDados(){
-		this.dados = this.getDataSource();
+		this.dados = this.getOlapData();
 	}
 	
-	getDataSource(){
+	getOlapData(){
 		return new jQuery.ig.OlapFlatDataSource({
-			dataSource:
-			[{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2010","valor": 10.0},
-{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2011","valor": 12.0},
-{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2012","valor": 3.0},
-{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2013","valor": 6.0},
-{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2014","valor": 7.0},
-{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2015","valor": 11.0}],
+			dataSource: this.getDatasource(),
 			metadata: {
 				cube: {
-					name: "Totais",
-					caption: "Totais",
+					name: "Metricas",
+					caption: "Metricas",
 					measuresDimension: {
-						caption: "Metricas",
+						caption: "Measures",
 						measures: [ //for each measure, name and aggregator are required
 							{
 								caption: "Valor", name: "Valor",
@@ -179,39 +173,95 @@ export class OLAPComponent implements OnInit {
 								aggregator: jQuery.ig.OlapUtilities.prototype.sumAggregator('valor')
 							}]
 					},
-					dimensions: [ // for each dimension name and hierarchies are required
-						{
-							caption: "Municipio", name: "Municipio", hierarchies: [{
-								caption: "Municipio", name: "Municipio", levels: [
-									{
-										name: "AllMunicipio", caption: "Todos Municipios",
-										memberProvider: function (item) { return "Todos Municipios"; }
-									},
-									{
-										name: "MunicipioName", caption: "Municipio",
-										memberProvider: function (item) { return item.Municipio; }
-									}]
-							}]
-						},
-						{
-							caption: "Data", name: "Data", /*displayFolder: "Folder1\\Folder2",*/ hierarchies: [
-								jQuery.ig.OlapUtilities.prototype.getDateHierarchy(
-									"Data", // the source property name
-									["year"], // the date parts for which levels will be generated (optional)
-									"Datas", // The name for the hierarchy (optional)
-									"Data", // The caption for the hierarchy (optional)
-									["Year"], // the captions for the levels (optional)
-									"Todos Anos") // the root level caption (optional)
-							]
-						}
-					]
+					dimensions: this.getDimensions()
 				}
 			},
 			// Preload hierarchies for the rows, columns, filters and measures
 			rows: "[Data].[Datas]",
 			columns: "[Municipio].[Municipio]",
-			measures: "[Metricas].[Valor]"
+			measures: "[Measures].[Valor]"
 		});
+	}
+	
+	getDatasource(){
+		return [
+
+			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2010","valor": 10.0},
+			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2011","valor": 12.0},
+			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2012","valor": 3.0},
+			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2013","valor": 6.0},
+			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2014","valor": 7.0},
+			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2015","valor": 11.0},
+
+			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2010","valor": 10.0},
+			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2011","valor": 11.0},
+			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2012","valor": 12.0},
+			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2013","valor": 15.0},
+			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2014","valor": 20.0},
+			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2015","valor": 23.0},
+
+
+			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2010","valor": 10.0},
+			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2011","valor": 12.0},
+			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2012","valor": 3.0},
+			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2013","valor": 6.0},
+			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2014","valor": 7.0},
+			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2015","valor": 11.0},
+
+			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2010","valor": 3.0},
+			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2011","valor": 4.0},
+			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2012","valor": 5.0},
+			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2013","valor": 6.0},
+			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2014","valor": 7.0},
+			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2015","valor": 9.0}
+
+			];
+	}
+	
+	getDimensions(){
+		let dim = new Array();
+				
+		dim.push({
+			caption: "Categoria", name: "Categoria", hierarchies: [{
+				caption: "Categoria", name: "Categoria", levels: [
+					{
+						name: "AllCategoria", caption: "All Categorias",
+						memberProvider: function (item) { return "All Categorias"; }
+					},
+					{
+						name: "CategoriaName", caption: "Categoria",
+						memberProvider: function (item) { return item.Categoria; }
+					}]
+			}]
+		});
+		
+		dim.push({
+			caption: "Municipio", name: "Municipio", hierarchies: [{
+				caption: "Municipio", name: "Municipio", levels: [
+					{
+						name: "AllMunicipio", caption: "All Municipio",
+						memberProvider: function (item) { return "All Municipio"; }
+					},
+					{
+						name: "MunicipioName", caption: "Municipio",
+						memberProvider: function (item) { return item.Municipio; }
+					}]
+			}]
+		});
+		
+		dim.push({
+			caption: "Data", name: "Data", /*displayFolder: "Folder1\\Folder2",*/ hierarchies: [
+				jQuery.ig.OlapUtilities.prototype.getDateHierarchy(
+					"Data", // the source property name
+					["year"], // the date parts for which levels will be generated (optional)
+					"Datas", // The name for the hierarchy (optional)
+					"Data", // The caption for the hierarchy (optional)
+					["Year"], // the captions for the levels (optional)
+					"Todos Anos") // the root level caption (optional)
+			]
+		});
+		
+		return dim;
 	}
 	
 	goBack() {
