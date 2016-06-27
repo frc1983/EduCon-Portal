@@ -30,7 +30,6 @@ import {IgPivotDataSelectorComponent, IgPivotGridComponent} from "../../../Ignit
 
 export class OLAPComponent implements OnInit {
     errorMessage: string;
-    isLoading: boolean = false;
 	
 	private optsGrid: IgPivotGrid;
 	private optsSelector: IgPivotDataSelector;
@@ -43,6 +42,12 @@ export class OLAPComponent implements OnInit {
     tiposEnsino: Array<TipoEnsino>;
     anos: Array<Data>;
 	dados: any;
+	
+	messageMunicipios: string;
+	messageCategorias: string;
+	messageSubCategorias: string;
+	messageTipoEnsino: string;
+	messageAnos: string;
     
     constructor(private router: Router,
 		private _municipioService: MunicipioService,
@@ -58,7 +63,7 @@ export class OLAPComponent implements OnInit {
 			this.dados = new Array();
 		}
 	
-	ngOnInit() {		  
+	ngOnInit() {				  
 		this.getMunicipios();
 		this.getCategorias();
 		this.getSubCategorias();
@@ -79,77 +84,77 @@ export class OLAPComponent implements OnInit {
 	}
 	  
 	getMunicipios() {
-        this.isLoading = true;
+        this.messageMunicipios = "Carregando Municípios";
         this._municipioService
             .getMunicipios()
             .subscribe(
             municipios => {
                 this.municipios = municipios;
-                this.isLoading = false;
+				this.messageMunicipios = "Carregando Municípios - OK";
             },
             error => {
                 this.errorMessage = <any>error;
-                this.isLoading = false;
+				this.messageMunicipios = "Carregando Municípios - ERRO";
             });
     }
 
     getCategorias() {
-        this.isLoading = true;
+        this.messageCategorias = "Carregando Categorias";
         this._categoriaService
             .getCategorias()
             .subscribe(
             categorias => {
                 this.categorias = categorias;
-                this.isLoading = false;
+                this.messageCategorias = "Carregando Categorias - OK";
             },
             error => {
                 this.errorMessage = <any>error;
-                this.isLoading = false;
+                this.messageCategorias = "Carregando Categorias - ERRO";
             });
     }
 
     getSubCategorias() {
-        this.isLoading = true;
+        this.messageSubCategorias = "Carregando Categorias";
         this._categoriaService
             .getSubCategorias()
             .subscribe(
             subcategorias => {
                 this.subcategorias = subcategorias;
-                this.isLoading = false;
+                this.messageSubCategorias = "Carregando Categorias - OK";
             },
             error => {
                 this.errorMessage = <any>error;
-                this.isLoading = false;
+                this.messageSubCategorias = "Carregando Categorias - ERRO";
             });
     }
 
     getTiposEnsino() {
-        this.isLoading = true;
+        this.messageTipoEnsino = "Carregando Tipos de Ensino";
         this._tipoEnsinoService
             .getTiposEnsino()
             .subscribe(
             tipos => {
                 this.tiposEnsino = tipos;
-                this.isLoading = false;
+                this.messageTipoEnsino = "Carregando Tipos de Ensino - OK";
             },
             error => {
                 this.errorMessage = <any>error;
-                this.isLoading = false;
+                this.messageTipoEnsino = "Carregando Tipos de Ensino - ERRO";
             });
     }
 
     getAnos() {
-        this.isLoading = true;
+        this.messageAnos = "Carregando Datas";
         this._dataService
             .getAnos()
             .subscribe(
             anos => {
                 this.anos = anos;
-                this.isLoading = false;
+                this.messageAnos = "Carregando Datas - OK";
             },
             error => {
                 this.errorMessage = <any>error;
-                this.isLoading = false;
+                this.messageAnos = "Carregando Datas - ERRO";
             });
     }
 	
