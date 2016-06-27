@@ -21,49 +21,49 @@ import { DataService } from '../../services/data.service';
 import {IgPivotDataSelectorComponent, IgPivotGridComponent} from "../../../IgniteUI/src/igniteui.angular2.ts";
 
 @Component({
-  selector: 'olap',
-  templateUrl: 'app/pages/olap/olap.component.html',
-  styleUrls: ['app/pages/olap/olap.component.css'],
-  providers: [MunicipioService, CategoriaService, TipoEnsinoService, DadoService, DataService],
-  directives: [ ROUTER_DIRECTIVES, MDL, IgPivotDataSelectorComponent, IgPivotGridComponent ]
+	selector: 'olap',
+	templateUrl: 'app/pages/olap/olap.component.html',
+	styleUrls: ['app/pages/olap/olap.component.css'],
+	providers: [MunicipioService, CategoriaService, TipoEnsinoService, DadoService, DataService],
+	directives: [ROUTER_DIRECTIVES, MDL, IgPivotDataSelectorComponent, IgPivotGridComponent]
 })
 
 export class OLAPComponent implements OnInit {
     errorMessage: string;
-	
+
 	private optsGrid: IgPivotGrid;
 	private optsSelector: IgPivotDataSelector;
 	private selectorId: string;
 	private gridId: string;
-	
+
 	municipios: Array<Municipio>;
 	categorias: Array<Categoria>;
     subcategorias: Array<Categoria>;
     tiposEnsino: Array<TipoEnsino>;
     anos: Array<Data>;
 	dados: any;
-	
+
 	messageMunicipios: string;
 	messageCategorias: string;
 	messageSubCategorias: string;
 	messageTipoEnsino: string;
 	messageAnos: string;
-    
+
     constructor(private router: Router,
 		private _municipioService: MunicipioService,
         private _categoriaService: CategoriaService,
         private _tipoEnsinoService: TipoEnsinoService,
         private _dadosService: DadoService,
-        private _dataService: DataService) { 
-			this.municipios = new Array();
-			this.categorias = new Array();
-			this.subcategorias = new Array();
-			this.tiposEnsino = new Array();
-			this.anos = new Array();
-			this.dados = new Array();
-		}
-	
-	ngOnInit() {				  
+        private _dataService: DataService) {
+		this.municipios = new Array();
+		this.categorias = new Array();
+		this.subcategorias = new Array();
+		this.tiposEnsino = new Array();
+		this.anos = new Array();
+		this.dados = new Array();
+	}
+
+	ngOnInit() {
 		this.getMunicipios();
 		this.getCategorias();
 		this.getSubCategorias();
@@ -82,7 +82,7 @@ export class OLAPComponent implements OnInit {
 			dataSource: this.dados
 		};
 	}
-	  
+
 	getMunicipios() {
         this.messageMunicipios = "Carregando Municípios";
         this._municipioService
@@ -157,12 +157,12 @@ export class OLAPComponent implements OnInit {
                 this.messageAnos = "Carregando Datas - ERRO";
             });
     }
-	
-	getDados(){
+
+	getDados() {
 		this.dados = this.getOlapData();
 	}
-	
-	getOlapData(){
+
+	getOlapData() {
 		return new jQuery.ig.OlapFlatDataSource({
 			dataSource: this.getDatasource(),
 			metadata: {
@@ -187,45 +187,45 @@ export class OLAPComponent implements OnInit {
 			measures: "[Measures].[Valor]"
 		});
 	}
-	
-	getDatasource(){
+
+	getDatasource() {
 		return [
 
-			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2010","valor": 10.0},
-			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2011","valor": 12.0},
-			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2012","valor": 3.0},
-			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2013","valor": 6.0},
-			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2014","valor": 7.0},
-			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2015","valor": 11.0},
+			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2010", "valor": 10.0 },
+			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2011", "valor": 12.0 },
+			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2012", "valor": 3.0 },
+			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2013", "valor": 6.0 },
+			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2014", "valor": 7.0 },
+			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2015", "valor": 11.0 },
 
-			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2010","valor": 10.0},
-			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2011","valor": 11.0},
-			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2012","valor": 12.0},
-			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2013","valor": 15.0},
-			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2014","valor": 20.0},
-			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Função Docente","Subcategoria": "Estadual","Data": "2015","valor": 23.0},
+			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2010", "valor": 10.0 },
+			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2011", "valor": 11.0 },
+			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2012", "valor": 12.0 },
+			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2013", "valor": 15.0 },
+			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2014", "valor": 20.0 },
+			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2015", "valor": 23.0 },
 
 
-			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2010","valor": 10.0},
-			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2011","valor": 12.0},
-			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2012","valor": 3.0},
-			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2013","valor": 6.0},
-			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2014","valor": 7.0},
-			{"Fonte": "FEE","Municipio": "Porto Alegre","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2015","valor": 11.0},
+			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2010", "valor": 10.0 },
+			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2011", "valor": 12.0 },
+			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2012", "valor": 3.0 },
+			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2013", "valor": 6.0 },
+			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2014", "valor": 7.0 },
+			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2015", "valor": 11.0 },
 
-			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2010","valor": 3.0},
-			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2011","valor": 4.0},
-			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2012","valor": 5.0},
-			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2013","valor": 6.0},
-			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2014","valor": 7.0},
-			{"Fonte": "FEE","Municipio": "Bagé","TipoEnsino": "Ensino Fundamental","Categoria": "Matrícula Inicial","Subcategoria": "Estadual","Data": "2015","valor": 9.0}
+			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2010", "valor": 3.0 },
+			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2011", "valor": 4.0 },
+			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2012", "valor": 5.0 },
+			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2013", "valor": 6.0 },
+			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2014", "valor": 7.0 },
+			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2015", "valor": 9.0 }
 
-			];
+		];
 	}
-	
-	getDimensions(){
+
+	getDimensions() {
 		let dim = new Array();
-				
+
 		dim.push({
 			caption: "Categoria", name: "Categoria", hierarchies: [{
 				caption: "Categoria", name: "Categoria", levels: [
@@ -239,7 +239,7 @@ export class OLAPComponent implements OnInit {
 					}]
 			}]
 		});
-		
+
 		dim.push({
 			caption: "Municipio", name: "Municipio", hierarchies: [{
 				caption: "Municipio", name: "Municipio", levels: [
@@ -253,7 +253,7 @@ export class OLAPComponent implements OnInit {
 					}]
 			}]
 		});
-		
+
 		dim.push({
 			caption: "Data", name: "Data", /*displayFolder: "Folder1\\Folder2",*/ hierarchies: [
 				jQuery.ig.OlapUtilities.prototype.getDateHierarchy(
@@ -265,10 +265,24 @@ export class OLAPComponent implements OnInit {
 					"Todos Anos") // the root level caption (optional)
 			]
 		});
-		
+
 		return dim;
 	}
-	
+
+	findNome(lista, id) {
+		lista.forEach(key => {
+			if (key.id == id)
+				return key.nome;
+		});
+	}
+
+	findAno(lista, id) {
+		this.anos.forEach(key => {
+			if (key.id == id)
+				return key.ano;
+		});
+	}
+
 	goBack() {
         window.history.back();
     }
