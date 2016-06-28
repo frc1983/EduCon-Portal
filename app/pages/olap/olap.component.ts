@@ -45,6 +45,7 @@ export class OLAPComponent implements OnInit {
     anos: Array<Data>;
 	dados: any;
 	executando: boolean;
+	dadosBaixados: any;
 
 	messageMunicipios: string;
 	messageCategorias: string;
@@ -64,13 +65,15 @@ export class OLAPComponent implements OnInit {
 		this.subcategorias = new Array();
 		this.tiposEnsino = new Array();
 		this.anos = new Array();
+
+		this.executando = false;
 	}
 
 	ngOnInit() {
 		console.log("Init")
 
-		this.olapInit();
-		this.loadDadosGerais();		
+		this.olapInit([]);
+		this.loadDadosGerais();
 		/*this.getMunicipios().then((result) => {
 			this.getCategorias().then((result) => {
 				this.getSubCategorias().then((result) => {
@@ -85,36 +88,12 @@ export class OLAPComponent implements OnInit {
 				})
 			});
 		});*/
-		
 		console.log("Init fim")
 	}
-	
-	loadDadosGerais(){
-		Observable.forkJoin(
-			this.getMunicipios(),
-			this.getCategorias(),
-			this.getSubCategorias(),
-			this.getTiposEnsino(),
-			this.getAnos()		
-		).subscribe(
-			data => {
-				console.log(data)
-				this.messageMunicipios = data[0],
-				this.messageCategorias = data[1],
-				this.messageSubCategorias = data[2],
-				this.messageTipoEnsino = data[3],
-				this.messageAnos = data[4],
-				this.getDados()
-			},
-			err => {
-				console.log(err)
-			}
-		);
-	}
 
-	olapInit() {
+	olapInit(data) {
 		this.dados = new jQuery.ig.OlapFlatDataSource({
-			dataSource: this.getPlainDataSource(),//this.downloadedData, 
+			dataSource: data,//this.getPlainDataSource(),//this.downloadedData, 
 			metadata: {
 				cube: {
 					name: "Metricas",
@@ -149,7 +128,49 @@ export class OLAPComponent implements OnInit {
 		};
 	}
 
+	loadDadosGerais() {
+		Observable.forkJoin(
+			this.getMunicipios(),
+			this.getCategorias(),
+			this.getSubCategorias(),
+			this.getTiposEnsino(),
+			this.getAnos(),
+			this.getDados()
+		).subscribe(
+			data => {
+				console.log(data),
+					this.messageMunicipios = data[0],
+					this.messageCategorias = data[1],
+					this.messageSubCategorias = data[2],
+					this.messageTipoEnsino = data[3],
+					this.messageAnos = data[4],
+					console.log("Dados baixados", data[5]),
+					this.dadosBaixados = data[5][0],
+					this.putData()
+			},
+			err => {
+				console.log(err)
+			}
+			);
+	}
+
+	putData() {
+		//this.dados.dataSource().sourceOptions()._itemsSource = this.getPlainDataSource();
+		//this.dados.update();
+		/*this.optsGrid = {
+			dataSource: this.dados
+		};
+
+		this.optsSelector = {
+			dataSource: this.dados
+		};*/
+		console.log("UPDATED DADOS", this.dadosBaixados);
+		this.olapInit(this.dadosBaixados);
+		//console.log("SET DADOS", this.dados.dataSource().sourceOptions()._itemsSource);
+	}
+
 	getMunicipios(): Promise<any> {
+		console.log("GET MUNICIPIOS")
 		return new Promise<any>((resolve, reject) => {
 			this.messageMunicipios = "Carregando Municípios";
 			this._municipioService
@@ -168,6 +189,7 @@ export class OLAPComponent implements OnInit {
     }
 
     getCategorias(): Promise<any> {
+		console.log("GET CATEGORIAS")
 		return new Promise<any>((resolve, reject) => {
 			this.messageCategorias = "Carregando Categorias";
 			this._categoriaService
@@ -186,6 +208,7 @@ export class OLAPComponent implements OnInit {
     }
 
     getSubCategorias(): Promise<any> {
+		console.log("GET SUBCATEGORIAS")
 		return new Promise<any>((resolve, reject) => {
 			this.messageSubCategorias = "Carregando SubCategorias";
 			this._categoriaService
@@ -204,6 +227,7 @@ export class OLAPComponent implements OnInit {
     }
 
     getTiposEnsino(): Promise<any> {
+		console.log("GET TIPO ENSINO")
 		return new Promise<any>((resolve, reject) => {
 			this.messageTipoEnsino = "Carregando Tipos de Ensino";
 			this._tipoEnsinoService
@@ -222,6 +246,7 @@ export class OLAPComponent implements OnInit {
     }
 
     getAnos(): Promise<any> {
+		console.log("GET ANOS")
 		return new Promise<any>((resolve, reject) => {
 			this.messageAnos = "Carregando Datas";
 			this._dataService
@@ -240,24 +265,29 @@ export class OLAPComponent implements OnInit {
     }
 
 	getDados(): Promise<any> {
+		console.log("GET DADOS")
 		let data = [];
 		let h;
 
 		return new Promise<any>((resolve, reject) => {
-			for (let i = 0; i < this.tiposEnsino.length; h++) {
-				TimerWrapper.setTimeout(() => { }, 1000);
-				//this.getDatasource(mun.id.toString()).then((datasource: any) => {
-				if (!this.executando) {
-					this.getDatasource("1").then((datasource: any) => {
-						data.push(datasource);
-						this.executando = false;
-						i++;
-					});
-				}
-			};
-			this.dados.dataSource().sourceOptions()._itemsSource = data;
+			//for (let i = 0; i < this.tiposEnsino.length; h++) {
+			TimerWrapper.setTimeout(() => {
+
+			}, 10000);
+			//this.getDatasource(mun.id.toString()).then((datasource: any) => {
+			//console.log(this.executando)
+			//if (!this.executando) {
+			this.getDatasource("1").then((datasource: any) => {
+				data.push(datasource);
+				this.executando = false;
+				console.log("DADOS OBTIDOS", data)
+				//this.dados.dataSource().sourceOptions()._itemsSource = this.getPlainDataSource();
+				//i++;
+			});
+			//}
+			//};
+
 			resolve(data);
-			console.log("DADOS OBTIDOS", data)
 		});
 	}
 
@@ -294,7 +324,7 @@ export class OLAPComponent implements OnInit {
 				"Categoria": this.findNome(this.categorias, dado.idCategoria),
 				"Subcategoria": this.findNome(this.subcategorias, dado.idSubcategoria),
 				"Data": this.findAno(this.anos, dado.idData),
-				"valor": parseFloat(dado.valor.replace(',','.'))
+				"valor": parseFloat(dado.valor.replace(',', '.'))
 			});
 		});
 
