@@ -48,6 +48,9 @@ export class OLAPComponent implements OnInit {
 	messageSubCategorias: string;
 	messageTipoEnsino: string;
 	messageAnos: string;
+	messageDados: string;
+
+	downloadedData = [];
 
     constructor(private router: Router,
 		private _municipioService: MunicipioService,
@@ -60,111 +63,31 @@ export class OLAPComponent implements OnInit {
 		this.subcategorias = new Array();
 		this.tiposEnsino = new Array();
 		this.anos = new Array();
-		this.dados = new Array();
+		this.downloadedData = new Array();
+	}
+
+	ngAfterContentInit() {
+		console.log("After init")
+		this.olapInit();
 	}
 
 	ngOnInit() {
+		console.log("Init")
 		this.getMunicipios();
 		this.getCategorias();
 		this.getSubCategorias();
 		this.getTiposEnsino();
 		this.getAnos();
 		this.getDados();
-
-		this.selectorId = "dataSelector";
-		this.gridId = "pivotGrid";
-
-		this.optsGrid = {
-			dataSource: this.dados
-		};
-
-		this.optsSelector = {
-			dataSource: this.dados
-		};
+		setTimeout(function () {
+			console.log("timeout")
+		}, 10000)
+		console.log("Init fim")
 	}
 
-	getMunicipios() {
-        this.messageMunicipios = "Carregando Municípios";
-        this._municipioService
-            .getMunicipios()
-            .subscribe(
-            municipios => {
-                this.municipios = municipios;
-				this.messageMunicipios = "Carregando Municípios - OK";
-            },
-            error => {
-                this.errorMessage = <any>error;
-				this.messageMunicipios = "Carregando Municípios - ERRO";
-            });
-    }
-
-    getCategorias() {
-        this.messageCategorias = "Carregando Categorias";
-        this._categoriaService
-            .getCategorias()
-            .subscribe(
-            categorias => {
-                this.categorias = categorias;
-                this.messageCategorias = "Carregando Categorias - OK";
-            },
-            error => {
-                this.errorMessage = <any>error;
-                this.messageCategorias = "Carregando Categorias - ERRO";
-            });
-    }
-
-    getSubCategorias() {
-        this.messageSubCategorias = "Carregando Categorias";
-        this._categoriaService
-            .getSubCategorias()
-            .subscribe(
-            subcategorias => {
-                this.subcategorias = subcategorias;
-                this.messageSubCategorias = "Carregando Categorias - OK";
-            },
-            error => {
-                this.errorMessage = <any>error;
-                this.messageSubCategorias = "Carregando Categorias - ERRO";
-            });
-    }
-
-    getTiposEnsino() {
-        this.messageTipoEnsino = "Carregando Tipos de Ensino";
-        this._tipoEnsinoService
-            .getTiposEnsino()
-            .subscribe(
-            tipos => {
-                this.tiposEnsino = tipos;
-                this.messageTipoEnsino = "Carregando Tipos de Ensino - OK";
-            },
-            error => {
-                this.errorMessage = <any>error;
-                this.messageTipoEnsino = "Carregando Tipos de Ensino - ERRO";
-            });
-    }
-
-    getAnos() {
-        this.messageAnos = "Carregando Datas";
-        this._dataService
-            .getAnos()
-            .subscribe(
-            anos => {
-                this.anos = anos;
-                this.messageAnos = "Carregando Datas - OK";
-            },
-            error => {
-                this.errorMessage = <any>error;
-                this.messageAnos = "Carregando Datas - ERRO";
-            });
-    }
-
-	getDados() {
-		this.dados = this.getOlapData();
-	}
-
-	getOlapData() {
-		return new jQuery.ig.OlapFlatDataSource({
-			dataSource: this.getDatasource(),
+	olapInit() {
+		this.dados = new jQuery.ig.OlapFlatDataSource({
+			dataSource: this.getPlainDataSource(),//this.downloadedData, 
 			metadata: {
 				cube: {
 					name: "Metricas",
@@ -186,41 +109,143 @@ export class OLAPComponent implements OnInit {
 			columns: "[Municipio].[Municipio]",
 			measures: "[Measures].[Valor]"
 		});
+
+		this.selectorId = "dataSelector";
+		this.gridId = "pivotGrid";
+
+		this.optsGrid = {
+			dataSource: this.dados
+		};
+
+		this.optsSelector = {
+			dataSource: this.dados
+		};
 	}
 
-	getDatasource() {
-		return [
+	getMunicipios() {
+        this.messageMunicipios = "Carregando Municípios";
+		this._municipioService
+            .getMunicipios()
+            .subscribe(
+            municipios => {
+                this.municipios = municipios;
+				this.messageMunicipios = "Carregando Municípios - OK";				
+            },
+            error => {
+                this.errorMessage = <any>error;
+				this.messageMunicipios = "Carregando Municípios - ERRO";
+            });
+    }
 
-			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2010", "valor": 10.0 },
-			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2011", "valor": 12.0 },
-			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2012", "valor": 3.0 },
-			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2013", "valor": 6.0 },
-			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2014", "valor": 7.0 },
-			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2015", "valor": 11.0 },
+    getCategorias() {
+        this.messageCategorias = "Carregando Categorias";
+        this._categoriaService
+            .getCategorias()
+            .subscribe(
+            categorias => {
+                this.categorias = categorias;
+                this.messageCategorias = "Carregando Categorias - OK";				
+            },
+            error => {
+                this.errorMessage = <any>error;
+                this.messageCategorias = "Carregando Categorias - ERRO";
+            });
+    }
 
-			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2010", "valor": 10.0 },
-			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2011", "valor": 11.0 },
-			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2012", "valor": 12.0 },
-			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2013", "valor": 15.0 },
-			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2014", "valor": 20.0 },
-			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Função Docente", "Subcategoria": "Estadual", "Data": "2015", "valor": 23.0 },
+    getSubCategorias() {
+        this.messageSubCategorias = "Carregando Categorias";
+        this._categoriaService
+            .getSubCategorias()
+            .subscribe(
+            subcategorias => {
+                this.subcategorias = subcategorias;
+                this.messageSubCategorias = "Carregando Categorias - OK";
+				
+            },
+            error => {
+                this.errorMessage = <any>error;
+                this.messageSubCategorias = "Carregando Categorias - ERRO";
+            });
+    }
 
+    getTiposEnsino() {
+        this.messageTipoEnsino = "Carregando Tipos de Ensino";
+        this._tipoEnsinoService
+            .getTiposEnsino()
+            .subscribe(
+            tipos => {
+                this.tiposEnsino = tipos;
+                this.messageTipoEnsino = "Carregando Tipos de Ensino - OK";
+				
+            },
+            error => {
+                this.errorMessage = <any>error;
+                this.messageTipoEnsino = "Carregando Tipos de Ensino - ERRO";
+            });
+    }
 
-			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2010", "valor": 10.0 },
-			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2011", "valor": 12.0 },
-			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2012", "valor": 3.0 },
-			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2013", "valor": 6.0 },
-			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2014", "valor": 7.0 },
-			{ "Fonte": "FEE", "Municipio": "Porto Alegre", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2015", "valor": 11.0 },
+    getAnos() {
+        this.messageAnos = "Carregando Datas";
+        this._dataService
+            .getAnos()
+            .subscribe(
+            anos => {
+                this.anos = anos;
+                this.messageAnos = "Carregando Datas - OK";				
+            },
+            error => {
+                this.errorMessage = <any>error;
+                this.messageAnos = "Carregando Datas - ERRO";
+            });
+    }
 
-			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2010", "valor": 3.0 },
-			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2011", "valor": 4.0 },
-			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2012", "valor": 5.0 },
-			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2013", "valor": 6.0 },
-			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2014", "valor": 7.0 },
-			{ "Fonte": "FEE", "Municipio": "Bagé", "TipoEnsino": "Ensino Fundamental", "Categoria": "Matrícula Inicial", "Subcategoria": "Estadual", "Data": "2015", "valor": 9.0 }
+	getDados() {		
+		
+		//this.tiposEnsino.forEach(mun => {
+			//this.getDatasource(mun.id.toString()).then((datasource: any) => {
+			this.getDatasource("1").then((datasource: any) => {
+				this.downloadedData.push(JSON.stringify(datasource))
+			});
+		//});
+	}
 
-		];
+	getDatasource(idMun) {
+		this.messageDados = "Carregando Dados";
+		return new Promise<any>((resolve, reject) => {			
+			this._dadosService
+			.getDadoPorMunicipioTipoCategoria("1", idMun, "1")
+			.subscribe(
+			dados => {
+				let dado = this.parseDados(dados);
+				resolve(dado);
+				this.messageDados = "Carregando Dados - OK";
+			},
+			error => {
+				this.errorMessage = <any>error;
+				this.messageDados = "Carregando Dados - ERRO";
+			});			
+		});
+	}
+
+	getPlainDataSource() {
+		return [{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2000","valor":18},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2000","valor":18},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2001","valor":82},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2001","valor":82},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2001","valor":82},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2001","valor":82},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2002","valor":145},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2002","valor":145},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2002","valor":145},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2002","valor":145},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2003","valor":212},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2003","valor":212},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2003","valor":212},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2003","valor":212},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2004","valor":160},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2004","valor":160},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2006","valor":134},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2006","valor":134},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2007","valor":144},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2007","valor":144},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2007","valor":144},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2007","valor":144},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2008","valor":198},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Jovem Adulto","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2008","valor":198},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2000","valor":1.117},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2000","valor":1.575},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2000","valor":164},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2000","valor":2.856},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2001","valor":970},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2001","valor":970},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2001","valor":1.672},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2001","valor":1.672},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2001","valor":107},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2001","valor":2.749},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2001","valor":2.749},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2002","valor":814},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2002","valor":814},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2002","valor":1.719},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2002","valor":96},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2002","valor":1.719},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2002","valor":2.629},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2002","valor":2.629},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2003","valor":739},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2003","valor":739},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2003","valor":1.696},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2003","valor":98},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2003","valor":2.533},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2003","valor":2.533},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2004","valor":792},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2004","valor":792},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2004","valor":1.658},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2004","valor":104},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2004","valor":2.554},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2004","valor":2.554},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2006","valor":709},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2006","valor":1.732},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2006","valor":134},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2006","valor":2.575},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2006","valor":2.575},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2007","valor":698},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2007","valor":698},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2007","valor":1.739},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2007","valor":133},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2007","valor":1.739},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2007","valor":2.57},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2007","valor":2.57},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2008","valor":683},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2008","valor":1.691},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2008","valor":138},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Fundamental","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2008","valor":2.512},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2000","valor":7},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2000","valor":7},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2001","valor":4},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2001","valor":4},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2001","valor":4},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2001","valor":4},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2002","valor":3},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2002","valor":3},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2002","valor":3},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2003","valor":3},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2003","valor":3},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2003","valor":3},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2005","valor":100},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2006","valor":3},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2006","valor":112},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2006","valor":112},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2006","valor":115},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2007","valor":116},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2007","valor":116},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2007","valor":116},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2007","valor":116},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2008","valor":3},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2008","valor":52},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Especial","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2008","valor":55},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2000","valor":127},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2000","valor":243},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2000","valor":24},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2000","valor":394},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2001","valor":101},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2001","valor":101},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2001","valor":256},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2001","valor":256},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2001","valor":39},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2001","valor":396},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2001","valor":396},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2002","valor":89},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2002","valor":89},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2002","valor":232},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2002","valor":232},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2002","valor":50},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2002","valor":371},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2002","valor":371},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2003","valor":83},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2003","valor":260},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2003","valor":51},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2003","valor":260},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2003","valor":394},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2003","valor":394},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2004","valor":77},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2004","valor":243},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2004","valor":62},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2004","valor":382},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2006","valor":95},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2006","valor":246},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2006","valor":65},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2006","valor":246},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2006","valor":406},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2006","valor":406},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2007","valor":75},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2007","valor":200},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2007","valor":60},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2007","valor":335},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2007","valor":335},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2008","valor":37},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Municipal","Data":"2008","valor":209},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2008","valor":77},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Educação Infantil","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2008","valor":323},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2000","valor":487},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2000","valor":487},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2001","valor":477},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2001","valor":477},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2001","valor":477},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2001","valor":477},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2002","valor":463},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2002","valor":463},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2002","valor":463},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2002","valor":463},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2003","valor":478},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2003","valor":478},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2003","valor":12},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2003","valor":490},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2003","valor":490},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2006","valor":467},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2006","valor":37},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2006","valor":467},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2006","valor":504},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2006","valor":504},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2007","valor":477},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2007","valor":477},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Particular","Data":"2007","valor":32},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2007","valor":509},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Total","Data":"2007","valor":509},{"Fonte":"FEE","Municipio":"Agudo","TipoEnsino":"Ensino Médio","Categoria":"Matrícula Inicial","Subcategoria":"Estadual","Data":"2008","valor":431}];
+	}
+
+	parseDados(dados: Array<Dado>) {
+		let parsed = [];
+		dados.forEach(dado => {
+			parsed.push({
+				"Fonte": "FEE",
+				"Municipio": this.findNome(this.municipios, dado.idMunicipio),
+				"TipoEnsino": this.findNome(this.tiposEnsino, dado.idTipoEnsino),
+				"Categoria": this.findNome(this.categorias, dado.idCategoria),
+				"Subcategoria": this.findNome(this.subcategorias, dado.idSubcategoria),
+				"Data": this.findAno(this.anos, dado.idData),
+				"valor": parseFloat(dado.valor)
+			});
+		});
+
+		return parsed;
 	}
 
 	getDimensions() {
@@ -255,6 +280,34 @@ export class OLAPComponent implements OnInit {
 		});
 
 		dim.push({
+			caption: "TipoEnsino", name: "Tipo de Ensino", hierarchies: [{
+				caption: "TipoEnsino", name: "Tipo de Ensino", levels: [
+					{
+						name: "AllTipoEnsino", caption: "All Tipo de Ensino",
+						memberProvider: function (item) { return "All Tipo de Ensino"; }
+					},
+					{
+						name: "TipoEnsinoName", caption: "Tipo de Ensino",
+						memberProvider: function (item) { return item.TipoEnsino; }
+					}]
+			}]
+		});
+
+		dim.push({
+			caption: "Subcategoria", name: "Subcategoria", hierarchies: [{
+				caption: "Subcategoria", name: "Subcategoria", levels: [
+					{
+						name: "AllSubcategoria", caption: "All Subcategoria",
+						memberProvider: function (item) { return "All Subcategoria"; }
+					},
+					{
+						name: "SubcategoriaName", caption: "Subcategoria",
+						memberProvider: function (item) { return item.Subcategoria; }
+					}]
+			}]
+		});
+
+		dim.push({
 			caption: "Data", name: "Data", /*displayFolder: "Folder1\\Folder2",*/ hierarchies: [
 				jQuery.ig.OlapUtilities.prototype.getDateHierarchy(
 					"Data", // the source property name
@@ -270,17 +323,27 @@ export class OLAPComponent implements OnInit {
 	}
 
 	findNome(lista, id) {
-		lista.forEach(key => {
-			if (key.id == id)
-				return key.nome;
-		});
+		let nome = "";
+		for (let i = 0; i < lista.length; i++) {
+			if (lista[i].id == id) {
+				nome = lista[i].nome;
+				break;
+			}
+		};
+
+		return nome;
 	}
 
 	findAno(lista, id) {
-		this.anos.forEach(key => {
-			if (key.id == id)
-				return key.ano;
-		});
+		let data = "";
+		for (let i = 0; i < lista.length; i++) {
+			if (lista[i].id == id) {
+				data = lista[i].ano.toString();
+				break;
+			}
+		};
+
+		return data;
 	}
 
 	goBack() {
