@@ -16,6 +16,12 @@ export class CategoriaService {
             .catch(this._baseService.handleError);
     }
 
+    getCategoriaPorId(id: string) {
+        return this.http.get(this._categoriasUrl + id)
+            .map(obj => Categoria.fromJSON(this._baseService.extractData(obj)))
+            .catch(this._baseService.handleError);
+    }
+
     getSubCategorias() {
         return this.http.get(this._categoriasUrl + "/subcategorias")
             .map(obj => Categoria.fromJSONArray(this._baseService.extractData(obj)))

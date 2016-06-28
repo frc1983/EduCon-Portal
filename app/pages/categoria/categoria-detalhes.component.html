@@ -1,0 +1,87 @@
+<div mdl id="page-content-wrapper" class="mdl-grid ui-widget">
+    <h3 class="mdl-cell mdl-cell--12-col" [innerHTML]="categoria ? categoria.nome : ''"></h3>
+    <div class="error mdl-cell mdl-cell--12-col" *ngIf="errorMessage">{{errorMessage}}</div>
+
+    <div id="detalhes-categoria" *ngIf="categoria" class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-card card-left mdl-shadow--2dp mdl-cell mdl-cell--4-col" style="min-height: 394px;">
+            <div class="mdl-card__title mdl-card--border">
+                <h2 class="mdl-card__title-text">Informações</h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <h5>Categorias:</h5>0 <br />
+                <h5>Municípios:</h5>0 <br />
+                <h5>Dados:</h5>0
+            </div>
+        </div>
+
+        <!--<div class="mdl-cell mdl-cell--12-col mdl-card card-left mdl-shadow--2dp width-to-max">
+			<div class="mdl-card__title mdl-card--border">
+                <h2 class="mdl-card__title-text">Categorias para gráficos</h2>
+            </div>
+			<div class="mdl-card__supporting-text">                
+                <h6>Selecione as categorias que deseja visualizar o gráfico:</h6>
+                <div *ngFor="let categoria of categorias" class="ui-grid-responsive" style="float: left;width:250px;margin-bottom:10px">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-1">
+                            <input type="checkbox" value="{{categoria}}" (change)="setSelectedGraph(categoria, $event)" />
+                        </div>
+                        <div class="ui-grid-col-11">
+                            <label class="ui-widget">{{categoria.nome}}</label>
+                        </div>
+                    </div>
+                </div>
+			</div>
+		</div>
+
+        <p>&nbsp;</p>
+        <h3>Gráficos</h3>
+
+		<div *ngFor="let selectedGraph of selectedGraphs" class="mdl-cell mdl-cell--6-col mdl-card card-left mdl-shadow--2dp">
+			<div class="mdl-card__title mdl-card--border">
+                <h2 class="mdl-card__title-text">{{selectedGraph.categoria.nome}} - {{categoria.nome}}</h2>
+            </div>
+			<div class="mdl-card__supporting-text">
+                <h6>Selecione as subcategorias que deseja visualizar dados no gráfico.</h6>
+                
+                <div *ngFor="let subcategoria of subcategorias" class="mdl-cell mdl-cell--12-col" style="float: left;width:250px;margin-bottom:10px">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-1">
+                            <input type="checkbox" value="{{subcategoria.id}}" (change)="getGraph(selectedGraph, subcategoria, $event)" />
+                        </div>
+                        <div class="ui-grid-col-11"><label class="ui-widget">{{subcategoria.nome}}</label></div>
+                    </div>
+                </div>
+
+                <div *ngFor="let selectedSubcategoria of selectedGraph.selectedSubcategorias" class="mdl-cell mdl-cell--12-col mdl-card card-left mdl-shadow--2dp" style="float: left;margin-bottom:10px">
+                    <div class="mdl-card__title mdl-card--border">
+                        <h2 class="mdl-card__title-text">{{selectedSubcategoria.nome}}</h2>
+                    </div>
+                    
+                    <div *ngFor="let sub of subcategorias" class="ui-grid-responsive" style="float: left;width:100%;margin-bottom:10px">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-1">
+                                <input type="checkbox" value="{{sub.id}}" (change)="setGraphData(selectedGraph, selectedSubcategoria, sub, $event, true)"/>
+                            </div>
+                            <div class="ui-grid-col-11"><label class="ui-widget">{{sub.nome}}</label></div>
+                        </div>
+                    </div>
+
+                    <p-lineChart *ngIf="selectedSubcategoria.length > 0" [value]="selectedSubcategoria.data" width="640" height="320" [bezierCurve]="false" 
+                        [responsive]="true" [legend]="lgnd">
+                        </p-lineChart>                  
+                        <div #lgnd></div>
+                </div>
+			</div>
+		</div>
+    </div>-->
+	
+    <div class="mdl-cell mdl-cell--12-col">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="goBack()">
+            Voltar
+        </button>
+    </div>
+
+    <div id="loader" *ngIf="isLoading">
+        <img src="app/images/loading.gif" class="ajax-loader" />
+    </div>
+</div>

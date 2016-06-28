@@ -14,6 +14,9 @@ import {MunicipioDetalhesComponent} from './pages/municipio/municipio-detalhes.c
 import {TipoEnsinoComponent} from './pages/tipoEnsino/tipoEnsino.component';
 import {TipoEnsinoDetalhesComponent} from './pages/tipoEnsino/tipoEnsino-detalhes.component';
 
+import {CategoriaComponent} from './pages/categoria/categoria.component';
+import {CategoriaDetalhesComponent} from './pages/categoria/categoria-detalhes.component';
+
 import {MDL} from './MaterialDesignLiteUpgradeElement';
 
 @Component({
@@ -53,6 +56,16 @@ import {MDL} from './MaterialDesignLiteUpgradeElement';
     path: '/tipoEnsino-detalhes/:id',
     name: 'TipoEnsino-Detalhes',
     component: TipoEnsinoDetalhesComponent
+  },
+  {
+    path: '/categoria',
+    name: 'Categoria',
+    component: CategoriaComponent
+  },
+  {
+    path: '/categoria-detalhes/:id',
+    name: 'Categoria-Detalhes',
+    component: CategoriaDetalhesComponent
   },
   {
     path: '/olap',
