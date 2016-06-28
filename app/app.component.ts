@@ -4,11 +4,16 @@ import {bootstrap} from 'angular2/platform/browser';
 
 import {HomeComponent} from './pages/home/home.component';
 import {CompareComponent} from './pages/compare/compare.component';
-import {MunicipioComponent} from './pages/municipio/municipio.component';
 import {ImportacaoComponent} from './pages/importacao/importacao.component';
 import {OLAPComponent} from './pages/olap/olap.component';
-import {MunicipioDetalhesComponent} from './pages/municipio/municipio-detalhes.component';
 import {SobreComponent} from './pages/sobre/sobre.component';
+
+import {MunicipioComponent} from './pages/municipio/municipio.component';
+import {MunicipioDetalhesComponent} from './pages/municipio/municipio-detalhes.component';
+
+import {TipoEnsinoComponent} from './pages/tipoEnsino/tipoEnsino.component';
+import {TipoEnsinoDetalhesComponent} from './pages/tipoEnsino/tipoEnsino-detalhes.component';
+
 import {MDL} from './MaterialDesignLiteUpgradeElement';
 
 @Component({
@@ -38,6 +43,16 @@ import {MDL} from './MaterialDesignLiteUpgradeElement';
     path: '/municipio-detalhes/:id',
     name: 'Municipio-Detalhes',
     component: MunicipioDetalhesComponent
+  },
+  {
+    path: '/tipoEnsino',
+    name: 'TipoEnsino',
+    component: TipoEnsinoComponent
+  },
+  {
+    path: '/tipoEnsino-detalhes/:id',
+    name: 'TipoEnsino-Detalhes',
+    component: TipoEnsinoDetalhesComponent
   },
   {
     path: '/olap',

@@ -1,0 +1,26 @@
+<div mdl id="page-content-wrapper" class="mdl-grid">
+    <h3 class="mdl-cell mdl-cell--12-col">Tipos de Ensino</h3>
+    <div class="error" *ngIf="errorMessage">{{errorMessage}}</div>
+
+    <!--<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input #buscatipoEnsino class="mdl-textfield__input" type="text" id="sample3">
+        <label class="mdl-textfield__label" for="sample3">Digite o nome do município</label>
+    </div>
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="getTipoEnsino(buscaTipoEnsino.value); buscaTipoEnsino.value=''">
+        Buscar
+    </button>-->
+
+	<p-dataTable [value]="tiposEnsino" [rows]="20" [paginator]="true" [responsive]="true" [totalRecords]="totalRecords" sortMode="multiple">
+		<p-column field="nome" header="Tipo de Ensino" [sortable]="true"></p-column>
+		<p-column header="Detalhes">
+			<template let-tipoEnsino="rowData">
+				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" 
+					(click)="onNavigate(tipoEnsino.id)" ><i class="fa fa-search" aria-hidden="true"></i></button>
+			</template>
+		</p-column>
+	</p-dataTable>
+
+</div>
+<div id="loader" *ngIf="isLoading">
+    <img src="app/images/loading.gif" class="ajax-loader" />
+</div>
