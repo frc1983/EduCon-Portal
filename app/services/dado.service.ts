@@ -27,4 +27,10 @@ export class DadoService {
             .map(obj => Dado.fromJSONArray(this._baseService.extractData(obj)))
             .catch(this._baseService.handleError);
     }
+
+    getDadoPorMunicipio(municipioId: string) {
+        return this.http.get(this._dadosUrl + "?dto.idMunicipio=" + municipioId)
+            .map(obj => Dado.fromJSONArray(this._baseService.extractData(obj)))
+            .catch(this._baseService.handleError);
+    }
 }
