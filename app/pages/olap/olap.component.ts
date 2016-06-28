@@ -1,3 +1,5 @@
+///<reference path="../../../node_modules/angular2/typings/browser.d.ts"/>
+
 import { Component, OnInit } from 'angular2/core';
 import { Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from 'angular2/router';
 import {TimerWrapper} from 'angular2/src/facade/async';
@@ -253,7 +255,9 @@ export class OLAPComponent implements OnInit {
 					});
 				}
 			};
+			this.dados.dataSource().sourceOptions()._itemsSource = data;
 			resolve(data);
+			console.log("DADOS OBTIDOS", data)
 		});
 	}
 
