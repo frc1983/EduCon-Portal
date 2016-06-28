@@ -53,10 +53,3 @@ ul {
     float: left;
     margin: 7px;
 }
-
-.mdl-layout__drawer {
-    width: 250px !important; 
-}
-.mdl-layout--fixed-drawer>.mdl-layout__content{
-    margin-left: 250px !important;    
-}
