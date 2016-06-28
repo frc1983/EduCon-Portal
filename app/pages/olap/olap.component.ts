@@ -69,9 +69,8 @@ export class OLAPComponent implements OnInit {
 	ngOnInit() {
 		console.log("Init")
 
-		this.loadDadosGerais();
-
 		this.olapInit();
+		this.loadDadosGerais();		
 		/*this.getMunicipios().then((result) => {
 			this.getCategorias().then((result) => {
 				this.getSubCategorias().then((result) => {
@@ -86,6 +85,7 @@ export class OLAPComponent implements OnInit {
 				})
 			});
 		});*/
+		
 		console.log("Init fim")
 	}
 	
@@ -95,7 +95,7 @@ export class OLAPComponent implements OnInit {
 			this.getCategorias(),
 			this.getSubCategorias(),
 			this.getTiposEnsino(),
-			this.getAnos()
+			this.getAnos()		
 		).subscribe(
 			data => {
 				console.log(data)
@@ -103,7 +103,7 @@ export class OLAPComponent implements OnInit {
 				this.messageCategorias = data[1],
 				this.messageSubCategorias = data[2],
 				this.messageTipoEnsino = data[3],
-				this.messageAnos = data[4]
+				this.messageAnos = data[4],
 				this.getDados()
 			},
 			err => {
