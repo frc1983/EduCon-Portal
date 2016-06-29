@@ -6,14 +6,14 @@ import {HTTP_PROVIDERS} from 'angular2/http';
 import {BaseService} from './services/base.service';
 import {ANGULAR2_GOOGLE_MAPS_PROVIDERS} from 'angular2-google-maps/core';
 
-import {DadoService} from './services/dado.service';
+import {SharedService} from './services/shared.service';
 
 import {LocationStrategy, HashLocationStrategy} from 'angular2/platform/common';
 
 bootstrap(AppComponent, [
 	    HTTP_PROVIDERS, 
 	    BaseService, 
-		DadoService,
+		SharedService,
 	    ANGULAR2_GOOGLE_MAPS_PROVIDERS,
 	    ROUTER_PROVIDERS,
 	    provide(LocationStrategy, {useClass: HashLocationStrategy})

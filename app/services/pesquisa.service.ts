@@ -10,8 +10,8 @@ export class PesquisaService {
     
     private _pesquisaUrl = this._baseService.getUrl() + "v1/pesquisa/";
         
-    pesquisaGeral() {
-        return this.http.get(this._pesquisaUrl)
+    pesquisaGeral(termo) {
+        return this.http.get(this._pesquisaUrl + "?texto=" + termo)
             .map(obj => Pesquisa.fromJSON(this._baseService.extractData(obj)))
             .catch(this._baseService.handleError);
     }

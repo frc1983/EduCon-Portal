@@ -1,14 +1,20 @@
 export class Pesquisa {
-  fontes: Array<Fonte>;
-  municipios: Array<Municipio>;
-  tiposEnsino: Array<TipoEnsino>;
-  categorias: Array<Categoria>;
+  itensPesquisados: Array<any>; 
   
   constructor(obj: Object) {
-    this.fontes = obj.fontes;
-    this.municipios = obj.municipios;
-    this.tiposEnsino = obj.tiposEnsino;
-    this.categorias = obj.categorias;
+    this.itensPesquisados = [];
+    obj.fontes.forEach(element => {
+      this.itensPesquisados.push({ "nome": element.nome, "tipo": "Fonte", "id": element.id });
+    });;
+    obj.municipios.forEach(element => {
+      this.itensPesquisados.push({ "nome": element.nome, "tipo": "Municipio", "id": element.id });
+    })
+    obj.tiposEnsino.forEach(element => {
+      this.itensPesquisados.push({ "nome": element.nome, "tipo": "TipoEnsino", "id": element.id });
+    })
+    obj.categorias.forEach(element => {
+      this.itensPesquisados.push({ "nome": element.nome, "tipo": "Categoria", "id": element.id });
+    })
   }
   
   static fromJSONArray(array: Array<Pesquisa>): Pesquisa[] {

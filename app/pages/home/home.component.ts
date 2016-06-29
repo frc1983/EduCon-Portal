@@ -54,7 +54,23 @@ export class HomeComponent implements OnInit {
       );
   }
 
-  // onNavigate(id) {
-  //   this.router.navigate(['/Categoria-Detalhes', { id: id }])
-  // }
+  onNavigate(tipo, id) {
+    switch (tipo) {
+      case "Fonte":
+        this.router.navigate(['/Fonte-Detalhes', { id: id }])
+        break;
+        case "Municipio":
+        this.router.navigate(['/Municipio-Detalhes', { id: id }])
+        break;
+        case "Categoria":
+        this.router.navigate(['/Categoria-Detalhes', { id: id }])
+        break;
+        case "TipoEnsino":
+        this.router.navigate(['/TipoEnsino-Detalhes', { id: id }])
+        break;
+    
+      default:
+        break;
+    }
+  }
 }
