@@ -111,7 +111,10 @@ export class OLAPComponent implements OnInit {
 		this.gridId = "pivotGrid";
 
 		this.optsGrid = {
-			dataSource: this.dados
+			dataSource: this.dados,
+			alternateRowStyles: true,
+			height : "600px",
+			width : "100%"
 		};
 
 		this.optsSelector = {
