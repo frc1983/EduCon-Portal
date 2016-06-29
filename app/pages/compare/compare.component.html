@@ -5,16 +5,23 @@
     <div class="mdl-cell mdl-cell--6-col">
         <h4 class="mdl-cell mdl-cell--12-col">Nome do município</h4>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input #buscaMunicipio1 class="mdl-textfield__input" type="text" id="sample3">
+            <input #buscaMunicipio1 class="mdl-textfield__input" type="text" id="sample3" [(ngModel)]=query (keyup)=filter()>
             <label class="mdl-textfield__label" for="sample3">Buscar município</label>
         </div>
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" 
-                (click)="getMunicipio1(buscaMunicipio1.value);"> 
+        <div class="suggestions" *ngIf="filteredList.length > 0">
+            <ul *ngFor="let item of filteredList">
+                <li>
+                    <a (click)="select(item.nome)">{{item.nome}}</a>
+                </li>
+            </ul>
+        </div>
+
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="getMunicipio1(buscaMunicipio1.value);"> 
             Buscar Município
         </button>
-        
+
         <div class="mdl-cell mdl-cell--12-col">
-            <div id="detalhes-municipio" *ngIf="municipio1" class="mdl-cell mdl-cell--12-col" >
+            <div id="detalhes-municipio" *ngIf="municipio1" class="mdl-cell mdl-cell--12-col">
                 <div class="mdl-card card-left mdl-shadow--2dp mdl-cell mdl-cell--12-col">
                     <div class="mdl-card__title mdl-card--border">
                         <h2 class="mdl-card__title-text">{{municipio1.nome}}</h2>
@@ -31,33 +38,34 @@
                         <h2 class="mdl-card__title-text">Mapa da Região</h2>
                     </div>
                     <div class="mdl-card__supporting-text">
-                        <sebm-google-map [latitude]="municipio1.latitude"
-                                        [longitude]="municipio1.longitude"
-                                        [zoom]="zoom">
-                            <sebm-google-map-marker *ngFor="let m of markers"
-                                                    [latitude]="m.lat"
-                                                    [longitude]="m.lng"
-                                                    [label]="m.label"></sebm-google-map-marker>
+                        <sebm-google-map [latitude]="municipio1.latitude" [longitude]="municipio1.longitude" [zoom]="zoom">
+                            <sebm-google-map-marker *ngFor="let m of markers" [latitude]="m.lat" [longitude]="m.lng" [label]="m.label"></sebm-google-map-marker>
                         </sebm-google-map>
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>
     </div>
     <div class="mdl-cell mdl-cell--6-col">
         <h4 class="mdl-cell mdl-cell--12-col">Nome do outro município</h4>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input #buscaMunicipio2 class="mdl-textfield__input" type="text" id="sample3">
+            <input #buscaMunicipio2 class="mdl-textfield__input" type="text" id="sample3" [(ngModel)]=query1 (keyup)=filter1()>
             <label class="mdl-textfield__label" for="sample3">Buscar município</label>
         </div>
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" 
-                (click)="getMunicipio2(buscaMunicipio2.value);">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="getMunicipio2(buscaMunicipio2.value);">
             Buscar Município
         </button>
-        
+        <div class="suggestions" *ngIf="filteredList1.length > 0">
+            <ul *ngFor="let item of filteredList1">
+                <li>
+                    <a (click)="select1(item.nome)">{{item.nome}}</a>
+                </li>
+            </ul>
+        </div>
+
         <div class="mdl-cell mdl-cell--12-col">
-            <div id="detalhes-municipio" *ngIf="municipio2" class="mdl-cell mdl-cell--12-col" >
-                <div class="mdl-card card-left mdl-shadow--2dp mdl-cell mdl-cell--12-col" >
+            <div id="detalhes-municipio" *ngIf="municipio2" class="mdl-cell mdl-cell--12-col">
+                <div class="mdl-card card-left mdl-shadow--2dp mdl-cell mdl-cell--12-col">
                     <div class="mdl-card__title mdl-card--border">
                         <h2 class="mdl-card__title-text">{{municipio2.nome}}</h2>
                     </div>
@@ -73,13 +81,8 @@
                         <h2 class="mdl-card__title-text">Mapa da Região</h2>
                     </div>
                     <div class="mdl-card__supporting-text">
-                        <sebm-google-map [latitude]="municipio2.latitude"
-                                        [longitude]="municipio2.longitude"
-                                        [zoom]="zoom">
-                            <sebm-google-map-marker *ngFor="let m2 of markers2"
-                                                    [latitude]="m2.lat"
-                                                    [longitude]="m2.lng"
-                                                    [label]="m2.label">
+                        <sebm-google-map [latitude]="municipio2.latitude" [longitude]="municipio2.longitude" [zoom]="zoom">
+                            <sebm-google-map-marker *ngFor="let m2 of markers2" [latitude]="m2.lat" [longitude]="m2.lng" [label]="m2.label">
                             </sebm-google-map-marker>
                         </sebm-google-map>
                     </div>

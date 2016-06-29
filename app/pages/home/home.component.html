@@ -17,9 +17,9 @@
         [totalRecords]="totalRecords" sortMode="multiple">
         <p-column field="nome" header="Município" [sortable]="true"></p-column>
         <p-column header="Detalhes">
-            <template let-municipio="rowData">
+            <template let-itensPesquisado="rowData">
 				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" 
-					(click)="onNavigate(itensPesquisados.tipo, itensPesquisados.id)"><i class="fa fa-search" aria-hidden="true"></i></button>
+					(click)="onNavigate(itensPesquisado.tipo, itensPesquisado.id)"><i class="fa fa-search" aria-hidden="true"></i></button>
 			</template>
         </p-column>
     </p-dataTable>
