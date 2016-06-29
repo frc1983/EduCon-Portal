@@ -26,7 +26,7 @@ import {Column} from 'primeng/primeng';
 })
 
 export class HomeComponent implements OnInit {
-  resultadoPesquisa: Array<Pesquisa>;
+  resultadoPesquisa: Pesquisa;
   errorMessage: string;
   isLoading: boolean = false;
 
