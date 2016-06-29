@@ -48,7 +48,6 @@ export class CategoriaComponent implements OnInit {
   }
 
   onNavigate(id) {
-    debugger;
     this.router.navigate(['/Categoria-Detalhes', { id: id }])
   }
 }

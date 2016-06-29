@@ -1,7 +1,28 @@
 <div mdl id="page-content-wrapper" class="mdl-grid" style="min-height: 600px;">
     <h3 class="mdl-cell mdl-cell--12-col">Bem-vindo ao EduCon!</h3>
+
+    <div class="error" *ngIf="errorMessage">{{errorMessage}}</div>
+    O EduCon é um protótipo de portal de Dados Abertos na área da Educação.
     
-    <p class="mdl-cell mdl-cell--12-col">O EduCon é um protótipo de portal de Dados Abertos na área da Educação.</p>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input #buscaGeral class="mdl-textfield__input" type="text" id="buscaGeral">
+        <label class="mdl-textfield__label" for="buscaGeral">O que você deseja visualizar?</label>
+    </div>
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="pesquisa(buscaGeral.value); buscaGeral.value=''">
+        Buscar
+    </button>
+
+	<p-dataTable [value]="resultadoPesquisa.municipios" [rows]="10" [paginator]="true" [responsive]="true" [totalRecords]="totalRecords" sortMode="multiple">
+		<p-column field="nome" header="Município" [sortable]="true"></p-column>
+		<p-column field="latitude" header="Latitude" [sortable]="true"></p-column>
+		<p-column field="longitude" header="Longitude" [sortable]="true"></p-column>
+		<p-column header="Detalhes">
+			<template let-municipio="rowData">
+				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" 
+					(click)="onNavigate(municipio.id)"><i class="fa fa-search" aria-hidden="true"></i></button>
+			</template>
+		</p-column>
+	</p-dataTable>
 </div>
 <div id="loader" *ngIf="isLoading">
     <img src="app/images/loading.gif" class="ajax-loader" />
