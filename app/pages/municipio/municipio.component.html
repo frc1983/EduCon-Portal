@@ -3,8 +3,8 @@
     <div class="error" *ngIf="errorMessage">{{errorMessage}}</div>
 
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input #buscaMunicipio class="mdl-textfield__input" type="text" id="sample3">
-        <label class="mdl-textfield__label" for="sample3">Digite o nome do município</label>
+        <input #buscaMunicipio class="mdl-textfield__input" type="text" id="bucaMunicipio">
+        <label class="mdl-textfield__label" for="bucaMunicipio">Digite o nome do município</label>
     </div>
     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="getMunicipio(buscaMunicipio.value); buscaMunicipio.value=''">
         Buscar
