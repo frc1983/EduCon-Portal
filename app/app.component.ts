@@ -17,13 +17,16 @@ import {TipoEnsinoDetalhesComponent} from './pages/tipoEnsino/tipoEnsino-detalhe
 import {CategoriaComponent} from './pages/categoria/categoria.component';
 import {CategoriaDetalhesComponent} from './pages/categoria/categoria-detalhes.component';
 
+import { SharedService } from './services/shared.service';
+import { DadoService } from './services/dado.service';
+
 import {MDL} from './MaterialDesignLiteUpgradeElement';
 
 @Component({
   selector: 'edu-con',
   templateUrl: 'app/app.component.html',
     directives: [ROUTER_DIRECTIVES, MDL],
-    providers: []
+    providers: [SharedService, DadoService]
 })
 @RouteConfig([
   {
@@ -86,4 +89,9 @@ import {MDL} from './MaterialDesignLiteUpgradeElement';
 
 export class AppComponent {
   title = 'EduCon - Educação Conectada';
+  
+  constructor(private _sharedService :SharedService,
+              private _dadosService: DadoService){
+      this._dadosService.loadFile()
+  }  
 }
