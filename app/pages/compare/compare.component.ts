@@ -344,13 +344,13 @@ export class CompareComponent implements OnInit {
       this.obterDadosMunicipio(this.municipio2.id.toString(), idCategoria, idTipoEnsino, idAno)
     ).subscribe(
       data => {
+        this.isLoading = false;
         console.log(data),
-
-          this.dadosMunicipio1 = data[0],
+          this.dadosMunicipio1 = data[0],          
           this.dadosMunicipio2 = data[1],
           this.tabelaDados1 = this.parseTabelaDados(this.dadosMunicipio1)[0],
           this.tabelaDados2 = this.parseTabelaDados(this.dadosMunicipio2)[0]
-        this.isLoading = false;
+        
       },
       err => {
         console.log(err)
