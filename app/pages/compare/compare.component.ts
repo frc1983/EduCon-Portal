@@ -190,7 +190,7 @@ export class CompareComponent implements OnInit {
 
     this.isLoading = true;
     return new Promise<Municipio>((resolve, reject) => {
-      this._municipioService
+      /*this._municipioService
         .getMunicipioPorNome(nome)
         .subscribe(
         municipios => {
@@ -202,7 +202,15 @@ export class CompareComponent implements OnInit {
           this.isLoading = false;
           reject(null);
         }
-        );
+        );*/
+        this.listMunicipios.forEach(mun =>{
+          if(mun.nome.toLowerCase() == nome.toLowerCase()){
+            resolve(mun);
+            this.isLoading = false;
+          } else {
+            this.isLoading = false;
+          }
+        });
     });
   }
 
