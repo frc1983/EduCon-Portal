@@ -8,6 +8,9 @@
             <input #buscaMunicipio1 class="mdl-textfield__input" type="text" id="sample3" [(ngModel)]=query (keyup)=filter()>
             <label class="mdl-textfield__label" for="sample3">Buscar município</label>
         </div>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="getMunicipio1(buscaMunicipio1.value);"> 
+            Buscar Município
+        </button>
         <div class="suggestions" *ngIf="filteredList.length > 0">
             <ul *ngFor="let item of filteredList">
                 <li>
@@ -16,9 +19,7 @@
             </ul>
         </div>
 
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="getMunicipio1(buscaMunicipio1.value);"> 
-            Buscar Município
-        </button>
+        
 
         <div class="mdl-cell mdl-cell--12-col">
             <div id="detalhes-municipio" *ngIf="municipio1" class="mdl-cell mdl-cell--12-col">

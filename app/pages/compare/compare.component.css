@@ -3,9 +3,9 @@
 }
 
 .suggestions {
-    height: 300px;
+    max-height: 300px;
     overflow: auto;
-    max-width: 300px;
+    width: 300px;
     margin: 0;
     border: 1px solid #E9E9E9;
 }
